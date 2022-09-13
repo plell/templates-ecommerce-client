@@ -1,6 +1,10 @@
-const origin = window.location.origin;
 
+
+// customer variables
 const SERVER_URL = "https://davidplell.com/"
+
+// core variables
+const origin = window.location.origin;
 
 export const isDevelopment =
   origin === "http://localhost:3000" ||
