@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { redirect } from "../../common/helpers";
+import { redirect } from "../../core/helpers";
 import { headers } from "./constants";
 
 export default function Top() {

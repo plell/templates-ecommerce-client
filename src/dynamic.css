@@ -1,0 +1,13 @@
+.MuiToggleButton-standard{
+    border-radius:20px !important;
+    height:40px;
+    margin-top:10px !important;
+    background: #639aff;
+    text-transform: none !important;
+}
+.Mui-selected{
+    background: #639aff !important;
+    color:#fff !important;
+}
+
+

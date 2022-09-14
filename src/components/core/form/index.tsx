@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { Button } from "@mui/material";
+import { Button } from "../ui";
 import Input from "./inputs";
+import { getPriceFromForm } from "../helpers";
 
 export default function Form(props: any) {
   const { schema } = props;
@@ -60,39 +61,43 @@ export default function Form(props: any) {
       }) => {
         return (
           <Wrap ref={refBody}>
-            {schema &&
-              schema
-                .filter(
-                  (f: any) => (page > 1 && f.persistHeader) || f.page === page
-                )
-                .map((item: any, index: number) => (
-                  <Input
-                    {...item}
-                    key={item.name + "_" + index}
-                    values={values}
-                    errors={errors}
-                    value={values[item.name]}
-                    error={errors[item.name]}
-                    initialValues={initialValues}
-                    deleteErrors={() => {
-                      if (errors[item.name]) delete errors[item.name];
-                    }}
-                    handleChange={(e: any) => {
-                      setFieldValue(item.name, e);
-                    }}
-                    setFieldValue={(field: string, value: any) => {
-                      setFieldValue(field, value);
-                    }}
-                    setFieldTouched={setFieldTouched}
-                    onBlur={() => setFieldTouched(item.name, false)}
-                    onFocus={() => setFieldTouched(item.name, true)}
-                  />
-                ))}
+            {schema
+              ?.filter(
+                (f: any) => (page > 1 && f.persistHeader) || f.page === page
+              )
+              .map((item: any, index: number) => (
+                <Input
+                  {...item}
+                  key={item.name + "_" + index}
+                  values={values}
+                  errors={errors}
+                  value={values[item.name]}
+                  error={errors[item.name]}
+                  initialValues={initialValues}
+                  deleteErrors={() => {
+                    if (errors[item.name]) delete errors[item.name];
+                  }}
+                  handleChange={(e: any) => {
+                    setFieldValue(item.name, e);
+                  }}
+                  setFieldValue={(field: string, value: any) => {
+                    setFieldValue(field, value);
+                  }}
+                  setFieldTouched={setFieldTouched}
+                  onBlur={() => setFieldTouched(item.name, false)}
+                  onFocus={() => setFieldTouched(item.name, true)}
+                />
+              ))}
+
+            <Total>
+              TOTAL:{" "}
+              <Price>${getPriceFromForm(schema, values).toFixed(2)} USD</Price>
+            </Total>
 
             <div
               style={{
                 display: "flex",
-                justifyContent: page > 1 ? "space-between" : "center",
+                justifyContent: "space-between",
                 marginTop: 20,
               }}
             >
@@ -132,6 +137,22 @@ export default function Form(props: any) {
     </Formik>
   );
 }
+
+const Total = styled.div`
+  display: flex;
+  margin-top: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #00000099;
+  font-size: 15px;
+`;
+
+const Price = styled.div`
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #000;
+`;
 
 const Wrap = styled.div`
   padding: 10px;
