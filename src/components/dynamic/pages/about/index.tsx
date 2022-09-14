@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { team, text1, text2, text3, hours } from "./constants";
-import { Img } from "../../../common/ui";
+import { Img, Wrap } from "../../../core/ui";
 
 export default function About() {
   return (
@@ -34,7 +34,10 @@ export default function About() {
       {team.map((m: any, i: number) => {
         return (
           <Row key={i}>
-            <Col style={{ padding: 30, width: 400 }}>{m.text}</Col>
+            <Col style={{ padding: 30, width: 400 }}>
+              <Txt>{m.text1}</Txt>
+              {m.text2 && <Txt>{m.text2}</Txt>}
+            </Col>
 
             <Col>
               <Img src={m.img} style={{ height: 466, width: 391 }} />
@@ -56,14 +59,6 @@ export const HoursBox = styled.div`
   width: 100%;
 `;
 
-export const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-`;
-
 export const Title = styled.div`
   font-size: 36px;
   margin: 55px 0;
@@ -78,7 +73,6 @@ export const Txt = styled.div`
 export const Col = styled.div`
   display: flex;
   flex-direction: column;
-
   text-align: center;
 `;
 

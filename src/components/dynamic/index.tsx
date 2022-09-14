@@ -9,21 +9,14 @@ import Press from "./pages/press";
 import Pages from "./pages";
 import Top from "./top";
 import Bottom from "./bottom";
+import { Wrap } from "../core/ui";
 
-export default function Dynamic() {
+export default function Content() {
   return (
-    <Wrap>
+    <Wrap style={{ justifyContent: "space-between" }}>
       <Top />
       <Pages />
       <Bottom />
     </Wrap>
   );
 }
-
-const Wrap = styled.div`
-  // display:flex;
-  // flex-direction:column;
-  height: 100%;
-  width: 980px;
-  align-items: center;
-`;

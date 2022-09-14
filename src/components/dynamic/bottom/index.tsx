@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Img } from "../../common/ui";
+import { Img } from "../../core/ui";
 
 export default function Bottom() {
   return (
