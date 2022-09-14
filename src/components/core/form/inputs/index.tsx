@@ -125,6 +125,7 @@ export default function MyInput(props: any) {
         </LocalizationProvider>
       );
     case "select":
+      const price = props.prices;
       return getMuiWrap(
         <>
           <InputLabel>{label}</InputLabel>
@@ -138,7 +139,7 @@ export default function MyInput(props: any) {
             {props.options.map((o: any, i: number) => {
               return (
                 <MenuItem key={i + "options"} value={o}>
-                  {o}
+                  {o} {props.prices && `($${props.prices[i]})`}
                 </MenuItem>
               );
             })}

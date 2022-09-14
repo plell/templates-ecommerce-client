@@ -89,12 +89,15 @@ export default function Form(props: any) {
                 />
               ))}
 
-            <Total>TOTAL: {getPriceFromForm(schema, values)}</Total>
+            <Total>
+              TOTAL:{" "}
+              <Price>${getPriceFromForm(schema, values).toFixed(2)} USD</Price>
+            </Total>
 
             <div
               style={{
                 display: "flex",
-                justifyContent: page > 1 ? "space-between" : "center",
+                justifyContent: "space-between",
                 marginTop: 20,
               }}
             >
@@ -135,7 +138,21 @@ export default function Form(props: any) {
   );
 }
 
-const Total = styled.div``;
+const Total = styled.div`
+  display: flex;
+  margin-top: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #00000099;
+  font-size: 15px;
+`;
+
+const Price = styled.div`
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 600;
+  color: #000;
+`;
 
 const Wrap = styled.div`
   padding: 10px;
