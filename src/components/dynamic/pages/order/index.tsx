@@ -1,40 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import {
-  cakeSchema,
-  customCake,
-  presetCake,
-} from "../../../common/form/schema";
+import { cakeSchema } from "../../../core/form/schema";
+import { cakeDesignSchemas, presetCakes, initialValues } from "./constants";
 
-import { Button, Modal } from "@mui/material";
 import Order from "../../../core/order";
 
-import { Img, Wrap } from "../../../common/ui";
-
-const cakeDesignSchemas: any = {
-  preset: presetCake,
-  custom: customCake,
-};
-
-const presetCakes = [
-  {
-    img: "cake/example cakes/baby blue with cherries.png",
-  },
-  {
-    img: "cake/example cakes/mushroom cake.png",
-  },
-  {
-    img: "cake/example cakes/pastel pink with ruffles.png",
-  },
-];
-
-const initialValues = {
-  cake_size: "8-inch",
-  cake_compote: "No Compote",
-  cake_flavor: "Cardamom",
-  cake_shape: "Round",
-};
+import { Img, Row, Wrap, Button } from "../../../core/ui";
 
 export default function OrderWrapper() {
   const [cakeType, setCakeType] = useState("preset");
@@ -68,7 +40,7 @@ export default function OrderWrapper() {
         Order a Cake
       </div>
 
-      <Wrap>
+      <Row>
         <Cake>
           {presetCakes.map((c, i) => {
             return (
@@ -90,7 +62,7 @@ export default function OrderWrapper() {
         <div style={{ display: "flex", width: 380 }}>
           <Order initialValues={initialValues} schema={schema} />
         </div>
-      </Wrap>
+      </Row>
     </div>
   );
 }

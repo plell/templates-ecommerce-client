@@ -1,5 +1,5 @@
-import { Img, Col, Row, Wrap } from "../../../common/ui";
-import { redirect } from "../../../common/helpers";
+import { Img, Col, Row, Wrap } from "../../../core/ui";
+import { redirect } from "../../../core/helpers";
 import { press } from "./constants";
 
 export default function Press() {

@@ -2,7 +2,7 @@
 
 // customer variables
 const SERVER_URL = "https://davidplell.com/"
-
+export const PRODUCT_BASE_PRICE = 50
 // core variables
 const origin = window.location.origin;
 
@@ -13,6 +13,8 @@ export const isDevelopment =
     : false;
   
 export const API_URL = isDevelopment ? "http://localhost:8000/" : SERVER_URL;
+
+
 
 
 
