@@ -1,11 +1,10 @@
 import api from "./api";
 
-export async function getStripeSession() {
-    const res = await api.post("stripe/createSessionByCustomer", {
-        amount: 10000,
-    });
-    
-    
-  
+type stripeSessionInput = {
+    amount: number,
+}
+
+export async function getStripeSession(data: stripeSessionInput) {
+    const res = await api.post("stripe/createSessionByCustomer", data);
     return res
 }
