@@ -1,4 +1,3 @@
-import { PRODUCT_BASE_PRICE } from "../../constants";
 
 export function redirect(link: string) {
     let a = document.createElement("a");
@@ -8,19 +7,20 @@ export function redirect(link: string) {
 }
   
 export function getPriceFromForm(schema: any, values:any) {
-  let priceSum = PRODUCT_BASE_PRICE || 0;
+  let priceSum = 0;
   schema?.forEach((s: any) => {
     const currentValue = values[s.name];
-    if (currentValue && s.price) priceSum += s.price;
+    if (s.type === 'select' && currentValue && s.prices) {
+      const index = s.options.findIndex((f: string) => f === currentValue)
+      priceSum += s.prices[index]
+    } else if (currentValue && s.price) {
+      priceSum += s.price;
+    }
   });
   return priceSum
 }
 
-export function getPriceFromFormForStripe(schema: any, values:any) {
-  let priceSum = PRODUCT_BASE_PRICE || 0;
-  schema?.forEach((s: any) => {
-    const currentValue = values[s.name];
-    if (currentValue && s.price) priceSum += s.price;
-  });
-  return priceSum*100
+export function getPriceFromFormForStripe(schema: any, values: any) {
+  // stripe uses cents with no decimals
+  return getPriceFromForm(schema, values) * 100
 }

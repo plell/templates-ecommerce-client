@@ -24,6 +24,7 @@ export const presetCake = [
     label: "Size",
     type: "select",
     options: ["6-inch", "8-inch"],
+    prices: [55, 75],
     page: 2,
   },
   {
@@ -45,6 +46,7 @@ export const presetCake = [
     name: "cake_text",
     label: "Cake Text",
     type: "text",
+    price: 3,
     page: 2,
   },
 ];
@@ -60,6 +62,14 @@ export const customCake = [
     type: "header",
     page: 2,
     persistHeader: true,
+  },
+  {
+    name: "cake_size",
+    label: "Size",
+    type: "select",
+    options: ["6-inch", "8-inch"],
+    prices: [55, 75],
+    page: 2,
   },
   {
     name: "cake_top",

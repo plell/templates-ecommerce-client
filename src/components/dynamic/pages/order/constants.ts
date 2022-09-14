@@ -23,7 +23,7 @@ export const cakeDesignSchemas: any = {
   ];
   
   export const initialValues = {
-    cake_size: ["8-inch"],
+    cake_size: "6-inch",
     cake_compote: null,
     cake_flavor: ["Cardamom"],
     cake_base: ["Round"],
