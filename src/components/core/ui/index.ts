@@ -35,12 +35,18 @@ export const MenuItem:any = styled(mui.MenuItem)`
 export const FormControl:any = styled(mui.FormControl)`
 
 `;
-export const FloatLabel:any = styled(mui.InputLabel)`
+
+type LabelProps = {
+      err?: string;
+}
+
+export const FloatLabel:any = styled(mui.InputLabel)<LabelProps>`
 left:-13px !important;
+${p=>p.err&&'color:#be9514 !important;'}
 `;
 
-export const InputLabel:any = styled(mui.InputLabel)`
-
+export const InputLabel:any = styled(mui.InputLabel)<LabelProps>`
+${p=>p.err&&'color:#be9514 !important;'}
 `;
 
 export const ToggleButton: any = styled(mui.ToggleButton)`
@@ -59,7 +65,7 @@ flex:1;
 `;
 
 export const FieldWrap = styled.div`
-margin:10px 0;
+margin:10px 0 15px;
 `;
 
 
