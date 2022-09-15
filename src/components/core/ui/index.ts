@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import * as mui from '@mui/material'
 
 
+
+
 export const Modal:any = styled(mui.Modal)`
 display:flex;
 justify-content:center;
@@ -53,7 +55,13 @@ export const ToggleButton: any = styled(mui.ToggleButton)`
 
 `;
 
-export const Button:any = styled(mui.Button)`
+export const IconButton: any = styled(mui.IconButton)`
+font-size:20px !important;
+text-transform: none !important;
+`;
+
+export const Button: any = styled(mui.Button)`
+font-size:20px !important;
 text-transform: none !important;
 `;
 

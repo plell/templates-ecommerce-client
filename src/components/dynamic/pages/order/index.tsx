@@ -32,10 +32,8 @@ export default function OrderWrapper() {
 
   if (!imgs.length) imgs.push(cakeImages["cake_base_Round"]);
 
-  console.log("imgs", imgs);
-
   return (
-    <div>
+    <div style={{ minHeight: 800 }}>
       <div
         style={{
           width: "100%",
@@ -65,8 +63,8 @@ export default function OrderWrapper() {
             );
           })}
         </Cake>
-        <div style={{ width: 70 }} />
-        <div style={{ display: "flex", width: 380 }}>
+        <div style={{ width: 50 }} />
+        <div style={{ display: "flex", width: 420 }}>
           <Order
             getFormState={getFormState}
             initialValues={initialValues}
@@ -81,8 +79,10 @@ export default function OrderWrapper() {
 const Cake = styled.div`
   position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 400px;
-  min-width: 460px;
+  flex-grow: 0;
+  max-height: 400px;
+  min-width: 450px;
+  background: #eee;
+  border-radius: 20px;
 `;
