@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { Button } from "../ui";
+import { Button, IconButton } from "../ui";
 import Input from "./inputs";
 import { getPriceFromForm } from "../helpers";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import ArrowForward from "@mui/icons-material/ArrowForward";
 
 type FormProps = {
   getFormState: (values: any) => void;
@@ -26,6 +28,12 @@ export default function Form(props: FormProps) {
   const [loading, setLoading] = useState(false);
   const refBody = useRef(null);
   const scrollDiv = props.scrollDiv ? props.scrollDiv : refBody;
+
+  useEffect(() => {
+    const values = props.formInnerRef?.current?.values;
+    if (values) getFormState(values);
+    console.log("inside form reporter");
+  }, []);
 
   useEffect(() => {
     scrollToTop();
@@ -73,6 +81,19 @@ export default function Form(props: FormProps) {
 
   return (
     <div ref={props.formRef}>
+      {page > 1 && (
+        // @ts-ignore
+        <IconButton
+          variant='text'
+          disabled={props.disabled || props.loading}
+          onClick={() => {
+            setPage(page - 1);
+          }}
+          loading={props.loading}
+        >
+          <ArrowBack />
+        </IconButton>
+      )}
       <Formik
         id={"order-form"}
         initialValues={props.initialValues || {}}
@@ -147,24 +168,11 @@ export default function Form(props: FormProps) {
                   marginTop: 20,
                 }}
               >
-                {page > 1 ? (
-                  // @ts-ignore
-                  <Button
-                    variant='text'
-                    disabled={props.disabled || props.loading}
-                    onClick={() => {
-                      setPage(page - 1);
-                    }}
-                    loading={props.loading}
-                  >
-                    Back
-                  </Button>
-                ) : (
-                  <div />
-                )}
+                <div />
 
                 <Button
                   variant='text'
+                  endIcon={<ArrowForward />}
                   disabled={props.disabled || props.loading}
                   onClick={async () => {
                     if (lastPage === page) handleSubmit();
@@ -212,7 +220,7 @@ const Wrap = styled.div`
   align-content: center;
   flex-shrink: 0;
   flex-grow: 0;
-  min-width: 290px;
+  min-width: 380px;
 `;
 
 const InputWrap = styled.div`
