@@ -1,7 +1,16 @@
 import * as Yup from "yup";
-import React from "react";
 
-const strValidator = Yup.string().trim().required("Required");
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+const rq = "Required";
+const phoneValidator = Yup.string()
+  .max(10)
+  .matches(phoneRegExp, "Phone number is not valid")
+  .required(rq);
+const strValidator = Yup.string().trim().nullable().required(rq);
+const nomValidator = Yup.number().required(rq);
+const emailValidator = Yup.string().email("Not a valid email").required(rq);
 const strValidatorNotRequired = Yup.string().trim();
 const repoStrValidator = Yup.string()
   .trim()
@@ -10,167 +19,174 @@ const repoStrValidator = Yup.string()
 
 export const presetCake = [
   {
-    type: "element",
-    element: <div />,
-    page: 2,
-  },
-  {
-    label: "Choose your Cake",
+    label: "Choose a Preset Cake",
     type: "header",
-    page: 2,
+    page: 3,
   },
   {
-    name: "cake_size",
-    label: "Size",
-    type: "select",
-    options: ["6-inch", "8-inch"],
-    prices: [55, 75],
-    page: 2,
+    name: "cake_design",
+    label: "Cake Design",
+    type: "toggleButtons",
+    options: ["Baby Blue w/ Cherries", "Pink Ruffle", "Green Mushroom"],
+    page: 3,
+    validator: strValidator,
+  },
+  // baby blue can add text
+  {
+    name: "cake_text",
+    label: "Cake Text",
+    type: "text",
+    price: 3,
+    page: 3,
+  },
+];
+
+export const customCake = [
+  {
+    label: "Design Your Own Cake",
+    type: "header",
+    page: 3,
   },
   {
     name: "cake_base",
     label: "Base",
     type: "toggleButtons",
     options: ["Heart", "Round"],
-    page: 2,
+    page: 3,
+    validator: strValidator,
   },
   {
-    name: "cake_design",
-    label: "Design",
+    name: "cake_top",
+    label: "Top",
     type: "toggleButtons",
-    options: ["Pink Ruffle", "Baby Blue", "Mushroom Cake"],
-    page: 2,
+    options: ["Shell", "Ruffles", "Rosettes"],
+    page: 3,
   },
-  // ruffle and baby can add text
+  {
+    name: "cake_bottom",
+    label: "Bottom",
+    type: "toggleButtons",
+    options: ["Shell", "Ruffles", "Heart Line", "Rosettes"],
+    page: 3,
+  },
+  {
+    name: "cake_side",
+    label: "Side",
+    type: "toggleButtons",
+    options: [
+      "Double String",
+      "Single String",
+      "Flat Ribbon",
+      "Ribbon",
+      "Ruffles",
+    ],
+    page: 3,
+  },
+  {
+    label: "Decorations",
+    type: "subheader",
+    page: 4,
+  },
+  {
+    name: "cake_decorations_cherries",
+    label: "Cherries",
+    price: 5,
+    type: "toggleButtons",
+    options: ["Cherries"],
+    page: 4,
+  },
+  {
+    name: "cake_decorations_sprinkles",
+    label: "Sprinkles",
+    price: 5,
+    type: "toggleButtons",
+    options: ["Pearls", "Rainbow"],
+    page: 4,
+  },
+  {
+    name: "cake_decorations_trim_accent",
+    label: "Trim Accent",
+    price: 5,
+    type: "toggleButtons",
+    options: ["Bows", "Pearls", "Rosettes"],
+    page: 4,
+  },
+  {
+    label: "Final Touch",
+    type: "subheader",
+    page: 5,
+  },
   {
     name: "cake_text",
     label: "Cake Text",
-    type: "text",
     price: 3,
-    page: 2,
+    type: "text",
+    page: 5,
   },
 ];
 
-export const customCake = [
-  {
-    type: "element",
-    element: <div />,
-    page: 2,
+// change cake lables here!
+export const cakeTypes = {
+  preset: {
+    schema: presetCake,
+    label: "Choose a Preset Cake",
   },
-  {
+  custom: {
+    schema: customCake,
     label: "Design Your Own Cake",
-    type: "header",
-    page: 2,
-    persistHeader: true,
   },
+};
+
+export const cakeSchemaSwitcher = {
+  [cakeTypes.preset.label]: cakeTypes.preset.schema,
+  [cakeTypes.custom.label]: cakeTypes.custom.schema,
+};
+
+export const cakeSchema = [
   {
     name: "cake_size",
     label: "Size",
     type: "select",
     options: ["6-inch", "8-inch"],
     prices: [55, 75],
-    page: 2,
-  },
-  {
-    name: "cake_top",
-    label: "Top",
-    type: "toggleButtons",
-    options: ["Shell", "Heart Line", "Rosettes"],
-    page: 2,
-  },
-  {
-    name: "cake_bottom",
-    label: "Bottom",
-    type: "toggleButtons",
-    options: ["Shell", "Heart Line", "Rosettes"],
-    page: 2,
-  },
-  {
-    name: "cake_side",
-    label: "Side",
-    type: "toggleButtons",
-    options: ["Shell", "Heart Line", "Rosettes"],
-    page: 2,
-  },
-  {
-    label: "Accents",
-    type: "subheader",
-    page: 3,
-  },
-  {
-    name: "cake_trim_accent",
-    label: "Trim Accent",
-    price: 5,
-    type: "toggleButtons",
-    options: ["Bows", "Pearls", "Rosettes", "Shell"],
-    page: 3,
-  },
-  {
-    name: "cake_string_accent",
-    label: "Single/Double String Accent",
-    price: 5,
-    type: "toggleButtons",
-    options: ["Bows", "Pearls", "Rosettes", "Shell"],
-    page: 3,
-  },
-  {
-    name: "cake_flat_ribbon_accent",
-    label: "Flat Ribbon Accent",
-    price: 5,
-    type: "toggleButtons",
-    options: ["Bows", "Pearls", "Rosettes", "Shell"],
-    page: 3,
-  },
-  {
-    label: "Final Touch",
-    type: "subheader",
-    page: 4,
-  },
-  {
-    name: "cake_text",
-    label: "Cake Text",
-    price: 3,
-    type: "text",
-    page: 4,
-  },
-  {
-    name: "cake_topping",
-    label: "Cake Topping",
-    type: "toggleButtons",
-    price: 3,
-    options: ["Sprinkles", "Pearls"],
-    page: 4,
-  },
-];
-
-export const cakeSchema = [
-  {
-    label: "Order a Cake!",
-    type: "header",
     page: 1,
-  },
-  {
-    name: "name",
-    label: "Your Name",
-    type: "text",
-    page: 1,
-  },
-  {
-    name: "email",
-    label: "Email",
-    type: "text",
-    page: 1,
-  },
-  {
-    name: "phone",
-    label: "Phone",
-    type: "number",
-    page: 1,
+    validator: strValidator,
   },
   {
     name: "pickup_date",
     label: "Pickup Date",
     type: "date",
     page: 1,
+    validator: strValidator,
+  },
+  {
+    name: "name",
+    label: "Your Name",
+    type: "text",
+    page: 1,
+    validator: strValidator,
+  },
+  {
+    name: "phone",
+    label: "Phone",
+    type: "number",
+    page: 1,
+    validator: phoneValidator,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "text",
+    page: 1,
+    validator: emailValidator,
+  },
+  {
+    name: "cake_type",
+    label: "",
+    options: [cakeTypes.preset.label, cakeTypes.custom.label],
+    neverNull: true,
+    type: "toggleButtons",
+    page: 2,
+    validator: strValidator,
   },
 ];

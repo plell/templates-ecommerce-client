@@ -1,31 +1,38 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-
-import { cakeSchema } from "../../../core/form/schema";
-import { cakeDesignSchemas, presetCakes, initialValues } from "./constants";
-
+import {
+  cakeSchema,
+  cakeSchemaSwitcher,
+  cakeTypes,
+} from "../../../core/form/schema";
+import { initialValues, doCakeImages, cakeImages } from "./constants";
 import Order from "../../../core/order";
-
-import { Img, Row, Wrap, Button } from "../../../core/ui";
+import { Img, Row } from "../../../core/ui";
 
 export default function OrderWrapper() {
-  const [cakeType, setCakeType] = useState("preset");
-
-  let schema: any = [...cakeSchema, ...cakeDesignSchemas[cakeType]];
-
-  const elementIndex = schema.findIndex((f: any) => f.type === "element");
-
-  if (elementIndex > -1) {
-    schema[elementIndex].element = (
-      <Button
-        variant='text'
-        style={{ marginBottom: 20 }}
-        onClick={() => setCakeType(cakeType === "custom" ? "preset" : "custom")}
-      >
-        {cakeType === "custom" ? "Choose Your Cake?" : "Design Your Own Cake?"}
-      </Button>
-    );
+  const [formState, setFormState]: any = useState({});
+  function getFormState(values: any) {
+    setFormState(values);
   }
+
+  let schema: any[] = [...cakeSchema];
+  if (formState?.cake_type) {
+    schema = [...cakeSchema, ...cakeSchemaSwitcher[formState.cake_type]];
+  }
+
+  if (
+    formState?.cake_type === cakeTypes.preset.label &&
+    formState?.cake_design === "Green Mushroom"
+  ) {
+    const textIndex = schema.findIndex((f: any) => f.name === "cake_text");
+    schema.splice(textIndex, 1);
+  }
+
+  const imgs: string[] = doCakeImages(schema, formState);
+
+  if (!imgs.length) imgs.push(cakeImages["cake_base_Round"]);
+
+  console.log("imgs", imgs);
 
   return (
     <div>
@@ -42,11 +49,11 @@ export default function OrderWrapper() {
 
       <Row>
         <Cake>
-          {presetCakes.map((c, i) => {
+          {imgs.map((c, i) => {
             return (
               <Img
                 key={"img" + i}
-                src={c.img}
+                src={`cake/${c}`}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -60,7 +67,11 @@ export default function OrderWrapper() {
         </Cake>
         <div style={{ width: 70 }} />
         <div style={{ display: "flex", width: 380 }}>
-          <Order initialValues={initialValues} schema={schema} />
+          <Order
+            getFormState={getFormState}
+            initialValues={initialValues}
+            schema={schema}
+          />
         </div>
       </Row>
     </div>
@@ -72,6 +83,6 @@ const Cake = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 360px;
-  width: 360px;
+  min-height: 400px;
+  min-width: 460px;
 `;
