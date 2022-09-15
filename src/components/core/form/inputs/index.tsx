@@ -13,8 +13,16 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import moment from "moment";
+
+import { DAYS_BEFORE_PICKUP } from "../../../../constants";
 
 export default function MyInput(props: any) {
+  let label = props.label;
+  if (props.price) label += ` (+$${props.price})`;
+  if (props.error) label += ` (${props.error})`;
+
   function getMuiWrap(el: any) {
     return (
       <FieldWrap key={props.name}>
@@ -22,9 +30,6 @@ export default function MyInput(props: any) {
       </FieldWrap>
     );
   }
-
-  let label = props.label;
-  if (props.price) label += ` (+$${props.price})`;
 
   switch (props.type) {
     case "space":
@@ -60,7 +65,7 @@ export default function MyInput(props: any) {
     case "text":
       return getMuiWrap(
         <>
-          <FloatLabel>{label}</FloatLabel>
+          <FloatLabel err={props.error}>{label}</FloatLabel>
           <Input
             placeholder=''
             value={props.value || ""}
@@ -71,18 +76,48 @@ export default function MyInput(props: any) {
           />
         </>
       );
+    case "number":
+      return getMuiWrap(
+        <>
+          <FloatLabel err={props.error}>{label}</FloatLabel>
+          <Input
+            placeholder=''
+            value={props.value || ""}
+            // label={props.label}
+            onChange={(e: any) => {
+              const value = e.target.value.trim();
+              if (value && isNaN(value)) return;
+              props.handleChange(value);
+            }}
+          />
+        </>
+      );
     case "toggleButtons":
       return (
         <>
-          <InputLabel>{label}</InputLabel>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <InputLabel err={props.error}>{label}</InputLabel>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             {props.options?.map((o: any, i: number) => {
-              let toggleState = props.value || [];
-              const selected = toggleState.includes(o);
+              let toggleState = props.value || "";
+              let selected = toggleState === o;
+
+              if (props.multi) {
+                toggleState = props.value || [];
+                selected = toggleState.includes(o);
+              }
+
               return (
                 //   @ts-ignore
                 <ToggleButton
                   selected={selected}
+                  value={selected}
                   style={{ marginRight: 10 }}
                   key={i + "toggle_" + props.name}
                   variant='text'
@@ -97,8 +132,8 @@ export default function MyInput(props: any) {
                         toggleState.push(o);
                       }
                     } else {
-                      if (selected) toggleState = null;
-                      else toggleState = [o];
+                      if (selected && !props.neverNull) toggleState = null;
+                      else toggleState = o;
                     }
                     props.setFieldValue(props.name, toggleState);
                   }}
@@ -112,11 +147,13 @@ export default function MyInput(props: any) {
         </>
       );
     case "date":
+      console.log("props.value", props.value);
       return getMuiWrap(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label='Pickup Date'
             value={props.value}
+            renderDay={renderWeekPickerDay}
             onChange={props.handleChange}
             renderInput={(params: any) => (
               <TextField helperText='' {...params} />
@@ -128,7 +165,7 @@ export default function MyInput(props: any) {
       const price = props.prices;
       return getMuiWrap(
         <>
-          <InputLabel>{label}</InputLabel>
+          <InputLabel err={props.error}>{label}</InputLabel>
           <Select
             value={props.value}
             label={label}
@@ -151,3 +188,15 @@ export default function MyInput(props: any) {
       return <></>;
   }
 }
+
+const renderWeekPickerDay = (
+  date: any,
+  selectedDates: any,
+  pickersDayProps: any
+) => {
+  const earliestDate =
+    moment().add(DAYS_BEFORE_PICKUP, "days").startOf("day").unix() - 1;
+  const thisDate = moment(date).startOf("day").unix();
+  const disabled = earliestDate < thisDate ? false : true;
+  return <PickersDay {...pickersDayProps} disabled={disabled} />;
+};

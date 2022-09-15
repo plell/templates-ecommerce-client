@@ -6,8 +6,22 @@ import { Button } from "../ui";
 import Input from "./inputs";
 import { getPriceFromForm } from "../helpers";
 
-export default function Form(props: any) {
-  const { schema } = props;
+type FormProps = {
+  getFormState: (values: any) => void;
+  onSubmit: (values: any) => void;
+  initialValues: any;
+  schema: any;
+  scrollDiv?: any;
+  paged?: boolean;
+  formRef?: any;
+  formInnerRef?: any;
+  submitText?: string;
+  loading?: boolean;
+  disabled?: boolean;
+};
+
+export default function Form(props: FormProps) {
+  const { schema, getFormState } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const refBody = useRef(null);
@@ -38,103 +52,138 @@ export default function Form(props: any) {
     });
   }
 
+  function validateErrors(errors: any) {
+    console.log("errors", errors);
+
+    let clean = true;
+    if (props.paged) {
+      const fieldsOnThisPage = props.schema.filter((f: any) => f.page === page);
+      fieldsOnThisPage.forEach((f: any) => {
+        if (errors[f.name]) clean = false;
+      });
+    } else if (Object.keys(errors).length) {
+      clean = false;
+    }
+
+    return clean;
+  }
+
   // if no schema, return empty div
   if (loading || !schema) return <Wrap />;
 
   return (
-    <Formik
-      initialValues={props.initialValues || {}}
-      onSubmit={props.onSubmit}
-      innerRef={props.formRef}
-      enableReinitialize={true}
-      validationSchema={validator(props.schema)}
-    >
-      {({
-        setFieldTouched,
-        handleSubmit,
-        values,
-        setFieldValue,
-        errors,
-        dirty,
-        isValid,
-        initialValues,
-      }) => {
-        return (
-          <Wrap ref={refBody}>
-            {schema
-              ?.filter(
-                (f: any) => (page > 1 && f.persistHeader) || f.page === page
-              )
-              .map((item: any, index: number) => (
-                <Input
-                  {...item}
-                  key={item.name + "_" + index}
-                  values={values}
-                  errors={errors}
-                  value={values[item.name]}
-                  error={errors[item.name]}
-                  initialValues={initialValues}
-                  deleteErrors={() => {
-                    if (errors[item.name]) delete errors[item.name];
-                  }}
-                  handleChange={(e: any) => {
-                    setFieldValue(item.name, e);
-                  }}
-                  setFieldValue={(field: string, value: any) => {
-                    setFieldValue(field, value);
-                  }}
-                  setFieldTouched={setFieldTouched}
-                  onBlur={() => setFieldTouched(item.name, false)}
-                  onFocus={() => setFieldTouched(item.name, true)}
-                />
-              ))}
+    <div ref={props.formRef}>
+      <Formik
+        id={"order-form"}
+        initialValues={props.initialValues || {}}
+        onSubmit={props.onSubmit}
+        validateOnMount
+        innerRef={props.formInnerRef}
+        enableReinitialize={true}
+        validationSchema={validator(props.schema)}
+      >
+        {({
+          setFieldTouched,
+          handleSubmit,
+          values,
+          setValues,
+          setFieldValue,
+          errors,
+          dirty,
+          isValid,
+          initialValues,
+        }) => {
+          return (
+            <Wrap ref={refBody}>
+              <InputWrap>
+                {schema
+                  ?.filter(
+                    (f: any) => (page > 1 && f.persistHeader) || f.page === page
+                  )
+                  .map((item: any, index: number) => (
+                    <Input
+                      {...item}
+                      key={item.name + "_" + index}
+                      values={values}
+                      errors={errors}
+                      value={values[item.name]}
+                      error={errors[item.name]}
+                      initialValues={initialValues}
+                      deleteErrors={() => {
+                        if (errors[item.name]) delete errors[item.name];
+                      }}
+                      handleChange={(value: any) => {
+                        setFieldValue(item.name, value);
+                        getFormState({
+                          ...values,
+                          [item.name]: value,
+                        });
+                      }}
+                      setFieldValue={(field: string, value: any) => {
+                        setFieldValue(field, value);
+                        getFormState({
+                          ...values,
+                          [item.name]: value,
+                        });
+                      }}
+                      setFieldTouched={setFieldTouched}
+                      onBlur={() => setFieldTouched(item.name, false)}
+                      onFocus={() => setFieldTouched(item.name, true)}
+                    />
+                  ))}
+              </InputWrap>
 
-            <Total>
-              TOTAL:{" "}
-              <Price>${getPriceFromForm(schema, values).toFixed(2)} USD</Price>
-            </Total>
+              <Total>
+                TOTAL:{" "}
+                <Price>
+                  ${getPriceFromForm(schema, values).toFixed(2)} USD
+                </Price>
+              </Total>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: 20,
-              }}
-            >
-              {page > 1 ? (
-                // @ts-ignore
-                <Button
-                  variant='text'
-                  disabled={props.disable || props.loading}
-                  onClick={() => {
-                    setPage(page - 1);
-                    // reloadForm()
-                  }}
-                  loading={props.loading}
-                >
-                  Back
-                </Button>
-              ) : (
-                <div />
-              )}
-
-              <Button
-                variant='text'
-                disabled={props.disable || props.loading}
-                onClick={async () => {
-                  if (lastPage === page) handleSubmit();
-                  else setPage(page + 1);
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: 20,
                 }}
               >
-                {lastPage > 1 && lastPage === page
-                  ? props.submitText || "Checkout"
-                  : "Next"}
-              </Button>
-            </div>
-          </Wrap>
-        );
-      }}
-    </Formik>
+                {page > 1 ? (
+                  // @ts-ignore
+                  <Button
+                    variant='text'
+                    disabled={props.disabled || props.loading}
+                    onClick={() => {
+                      setPage(page - 1);
+                    }}
+                    loading={props.loading}
+                  >
+                    Back
+                  </Button>
+                ) : (
+                  <div />
+                )}
+
+                <Button
+                  variant='text'
+                  disabled={props.disabled || props.loading}
+                  onClick={async () => {
+                    if (lastPage === page) handleSubmit();
+                    else {
+                      if (validateErrors(errors)) setPage(page + 1);
+                      else console.log(errors);
+                    }
+                  }}
+                >
+                  {lastPage > 1 && lastPage === page
+                    ? props.submitText || "Checkout"
+                    : "Next"}
+                </Button>
+              </div>
+            </Wrap>
+          );
+        }}
+      </Formik>
+    </div>
   );
 }
 
@@ -164,6 +213,10 @@ const Wrap = styled.div`
   flex-shrink: 0;
   flex-grow: 0;
   min-width: 290px;
+`;
+
+const InputWrap = styled.div`
+  min-height: 200px;
 `;
 
 function validator(config: any) {
