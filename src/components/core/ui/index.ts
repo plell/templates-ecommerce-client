@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import * as mui from '@mui/material'
+import { FadeInOverlay } from './animated/fadeInOverlay'
 
+export const FadeIn = FadeInOverlay
 
 export const Modal:any = styled(mui.Modal)`
 display:flex;
@@ -53,7 +55,13 @@ export const ToggleButton: any = styled(mui.ToggleButton)`
 
 `;
 
-export const Button:any = styled(mui.Button)`
+export const IconButton: any = styled(mui.IconButton)`
+font-size:20px !important;
+text-transform: none !important;
+`;
+
+export const Button: any = styled(mui.Button)`
+font-size:20px !important;
 text-transform: none !important;
 `;
 
@@ -62,6 +70,15 @@ display:flex;
 flex-direction:column;
 align-items:center;
 flex:1;
+`;
+
+export const PageWrap = styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+flex:1;
+padding-top:30px;
+margin-bottom:30px;
 `;
 
 export const FieldWrap = styled.div`
@@ -73,6 +90,11 @@ export const Col = styled.div`
 display:flex;
 flex-direction:column;
 `;
+
+export const Spacer = styled.div`
+height:60px;
+`;
+
 
 export const Row = styled.div`
 display:flex;

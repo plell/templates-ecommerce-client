@@ -1,7 +1,7 @@
 
 export const headers = [
     {
-      title: "Home",
+      title: "Top",
       to: "/",
     },
     {

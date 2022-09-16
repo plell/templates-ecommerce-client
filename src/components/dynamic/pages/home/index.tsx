@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import { PageWrap } from "../../../core/ui";
 
-export default function Home() {
+export default function Home({ innerRef }: any) {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <PageWrap ref={innerRef}>
       <iframe
         height='100%'
         width='100%'
@@ -12,6 +12,6 @@ export default function Home() {
         allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
         allowFullScreen
       ></iframe>
-    </div>
+    </PageWrap>
   );
 }

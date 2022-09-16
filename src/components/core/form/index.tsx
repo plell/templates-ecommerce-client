@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-import { Button } from "../ui";
+import { Button, FadeIn, IconButton } from "../ui";
 import Input from "./inputs";
 import { getPriceFromForm } from "../helpers";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import { sleep } from "../helpers";
 
 type FormProps = {
   getFormState: (values: any) => void;
@@ -23,25 +25,37 @@ type FormProps = {
 export default function Form(props: FormProps) {
   const { schema, getFormState } = props;
   const [page, setPage] = useState(1);
+  const [turningToPage, setTurningToPage]: any = useState(0);
   const [loading, setLoading] = useState(false);
+  const formRef: any = useRef(null);
   const refBody = useRef(null);
   const scrollDiv = props.scrollDiv ? props.scrollDiv : refBody;
 
   useEffect(() => {
-    scrollToTop();
-  }, [page]);
+    const values = formRef?.current?.values;
+    if (values) getFormState(values);
+    console.log("inside form reporter");
+  }, []);
 
-  function scrollToTop() {
-    if (scrollDiv && scrollDiv.current) {
-      scrollDiv.current.scrollTop = 0;
-    }
-  }
+  // useEffect(() => {
+  //   scrollToTop();
+  // }, [page]);
 
-  function reloadForm() {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 20);
+  // function scrollToTop() {
+  //   if (scrollDiv && scrollDiv.current) {
+  //     scrollDiv.current.scrollTop = 0;
+  //   }
+  // }
+
+  // function reloadForm() {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 20);
+  // }
+
+  async function doPageTurn(pageValue: number) {
+    setTurningToPage(pageValue);
   }
 
   let lastPage = 1;
@@ -78,7 +92,7 @@ export default function Form(props: FormProps) {
         initialValues={props.initialValues || {}}
         onSubmit={props.onSubmit}
         validateOnMount
-        innerRef={props.formInnerRef}
+        innerRef={formRef}
         enableReinitialize={true}
         validationSchema={validator(props.schema)}
       >
@@ -95,90 +109,101 @@ export default function Form(props: FormProps) {
         }) => {
           return (
             <Wrap ref={refBody}>
-              <InputWrap>
-                {schema
-                  ?.filter(
-                    (f: any) => (page > 1 && f.persistHeader) || f.page === page
-                  )
-                  .map((item: any, index: number) => (
-                    <Input
-                      {...item}
-                      key={item.name + "_" + index}
-                      values={values}
-                      errors={errors}
-                      value={values[item.name]}
-                      error={errors[item.name]}
-                      initialValues={initialValues}
-                      deleteErrors={() => {
-                        if (errors[item.name]) delete errors[item.name];
-                      }}
-                      handleChange={(value: any) => {
-                        setFieldValue(item.name, value);
-                        getFormState({
-                          ...values,
-                          [item.name]: value,
-                        });
-                      }}
-                      setFieldValue={(field: string, value: any) => {
-                        setFieldValue(field, value);
-                        getFormState({
-                          ...values,
-                          [item.name]: value,
-                        });
-                      }}
-                      setFieldTouched={setFieldTouched}
-                      onBlur={() => setFieldTouched(item.name, false)}
-                      onFocus={() => setFieldTouched(item.name, true)}
-                    />
-                  ))}
-              </InputWrap>
-
-              <Total>
-                TOTAL:{" "}
-                <Price>
-                  ${getPriceFromForm(schema, values).toFixed(2)} USD
-                </Price>
-              </Total>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: 20,
+              <FadeIn
+                isMounted={!turningToPage}
+                drift={20}
+                direction='up'
+                dismountCallback={() => {
+                  setTurningToPage(0);
+                  setPage(turningToPage);
                 }}
               >
-                {page > 1 ? (
-                  // @ts-ignore
-                  <Button
-                    variant='text'
-                    disabled={props.disabled || props.loading}
-                    onClick={() => {
-                      setPage(page - 1);
-                    }}
-                    loading={props.loading}
-                  >
-                    Back
-                  </Button>
-                ) : (
-                  <div />
-                )}
+                <>
+                  <InputWrap>
+                    {schema
+                      ?.filter(
+                        (f: any) =>
+                          (page > 1 && f.persistHeader) || f.page === page
+                      )
+                      .map((item: any, index: number) => (
+                        <Input
+                          {...item}
+                          key={item.name + "_" + index}
+                          values={values}
+                          errors={errors}
+                          value={values[item.name]}
+                          error={errors[item.name]}
+                          initialValues={initialValues}
+                          deleteErrors={() => {
+                            if (errors[item.name]) delete errors[item.name];
+                          }}
+                          handleChange={(value: any) => {
+                            setFieldValue(item.name, value);
+                            getFormState({
+                              ...values,
+                              [item.name]: value,
+                            });
+                          }}
+                          setFieldValue={(field: string, value: any) => {
+                            setFieldValue(field, value);
+                            getFormState({
+                              ...values,
+                              [item.name]: value,
+                            });
+                          }}
+                          setFieldTouched={setFieldTouched}
+                          onBlur={() => setFieldTouched(item.name, false)}
+                          onFocus={() => setFieldTouched(item.name, true)}
+                        />
+                      ))}
+                  </InputWrap>
 
-                <Button
-                  variant='text'
-                  disabled={props.disabled || props.loading}
-                  onClick={async () => {
-                    if (lastPage === page) handleSubmit();
-                    else {
-                      if (validateErrors(errors)) setPage(page + 1);
-                      else console.log(errors);
-                    }
-                  }}
-                >
-                  {lastPage > 1 && lastPage === page
-                    ? props.submitText || "Checkout"
-                    : "Next"}
-                </Button>
-              </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 20,
+                    }}
+                  >
+                    {page > 1 ? (
+                      // @ts-ignore
+                      <Button
+                        startIcon={<ArrowBack />}
+                        variant='text'
+                        disabled={props.disabled || props.loading}
+                        onClick={() => {
+                          doPageTurn(page - 1);
+                        }}
+                        loading={props.loading}
+                      >
+                        Back
+                      </Button>
+                    ) : (
+                      <div />
+                    )}
+
+                    <Button
+                      variant='contained'
+                      disabled={
+                        !validateErrors(errors) ||
+                        props.disabled ||
+                        props.loading
+                      }
+                      onClick={async () => {
+                        if (lastPage === page) handleSubmit();
+                        else {
+                          if (validateErrors(errors)) doPageTurn(page + 1);
+                          else console.log(errors);
+                        }
+                      }}
+                    >
+                      {lastPage > 1 && lastPage === page
+                        ? props.submitText || "Checkout"
+                        : `Next (${page}/${lastPage})`}
+                    </Button>
+                  </div>
+                </>
+              </FadeIn>
             </Wrap>
           );
         }}
@@ -186,22 +211,6 @@ export default function Form(props: FormProps) {
     </div>
   );
 }
-
-const Total = styled.div`
-  display: flex;
-  margin-top: 10px;
-  flex-direction: column;
-  align-items: flex-end;
-  color: #00000099;
-  font-size: 15px;
-`;
-
-const Price = styled.div`
-  font-size: 20px;
-  line-height: 30px;
-  font-weight: 600;
-  color: #000;
-`;
 
 const Wrap = styled.div`
   padding: 10px;
@@ -212,7 +221,7 @@ const Wrap = styled.div`
   align-content: center;
   flex-shrink: 0;
   flex-grow: 0;
-  min-width: 290px;
+  min-width: 380px;
 `;
 
 const InputWrap = styled.div`
