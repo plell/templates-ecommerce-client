@@ -1,10 +1,10 @@
-import { Img, Col, Row, Wrap } from "../../../core/ui";
+import { Img, Col, Row, PageWrap } from "../../../core/ui";
 import { redirect } from "../../../core/helpers";
 import { press } from "./constants";
 
-export default function Press() {
+export default function Press({ innerRef }: any) {
   return (
-    <Wrap>
+    <PageWrap ref={innerRef}>
       {press.map((m, i) => {
         return (
           <Row key={i} style={{ background: "#c4d9ff", padding: 20 }}>
@@ -25,6 +25,6 @@ export default function Press() {
           </Row>
         );
       })}
-    </Wrap>
+    </PageWrap>
   );
 }

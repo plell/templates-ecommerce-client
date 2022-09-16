@@ -1,18 +1,17 @@
 import styled from "styled-components";
 import { Img } from "../../core/ui";
 
-export default function Bottom() {
+export default function Bottom({ innerRef }: any) {
   return (
-    <Footer>
+    <Footer ref={innerRef}>
       <Cell>CONTACT email: lazycowbakery@gmail.com</Cell>
 
-      <Cell>
-        <Img src={"cowbaby.webp"} />
-      </Cell>
+      <Img src={"cowbaby.webp"} style={{ height: 80, width: 80 }} />
 
       <Cell>
-        VISIT US address: 3418 Fremont Ave N hours: 9-6pm wed-sat 9-4pm sunday
-        brunch hours: fri-sun 10-2pm
+        <div>ADDRESS: 3418 Fremont Ave N</div>
+        <div>HOURS: 9-6pm wed-sat 9-4pm sunday</div>
+        <div>BRUNCH HOURS: fri-sun 10-2pm</div>
       </Cell>
     </Footer>
   );
@@ -20,15 +19,15 @@ export default function Bottom() {
 
 const Footer = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
   background: #d4bd76;
-  height: 100px;
-  width: 100%;
+  padding: 5px 20px;
+  width: calc(100% - 40px);
 `;
 
 const Cell = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  width: 200px;
+  width: 300px;
 `;

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { team, text1, text2, text3, hours } from "./constants";
-import { Img, Wrap } from "../../../core/ui";
+import { Img, PageWrap } from "../../../core/ui";
 
-export default function About() {
+export default function About({ innerRef }: any) {
   return (
-    <Wrap>
+    <PageWrap ref={innerRef}>
       <Title>Our Mission</Title>
       <Row>
         <Col style={{ padding: 30 }}>
@@ -45,7 +45,7 @@ export default function About() {
           </Row>
         );
       })}
-    </Wrap>
+    </PageWrap>
   );
 }
 
@@ -56,14 +56,12 @@ export const HoursBox = styled.div`
   justify-content: center;
   padding: 30px;
   background: #d4bd76;
-  width: 100%;
+  width: calc(100% - 60px);
 `;
 
 export const Title = styled.div`
   font-size: 36px;
   margin: 55px 0;
-  font-family: helvetica-w01-bold, helvetica-w02-bold, helvetica-lt-w10-bold,
-    sans-serif;
 `;
 
 export const Txt = styled.div`

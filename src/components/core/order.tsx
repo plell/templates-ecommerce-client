@@ -22,14 +22,6 @@ export default function Order({
   schema,
   getFormState,
 }: OrderProps) {
-  const formRef: any = useRef(null);
-  const formInnerRef: any = useRef(null);
-
-  useLayoutEffect(() => {
-    if (formRef?.current)
-      formRef?.current?.scrollIntoView({ behavior: "smooth" });
-  }, [formRef?.current]);
-
   async function forwardToStripe(formValues: any) {
     const amount = getPriceFromFormForStripe(schema, formValues);
     try {
@@ -47,8 +39,6 @@ export default function Order({
   return (
     <Form
       paged
-      formRef={formRef}
-      formInnerRef={formInnerRef}
       getFormState={getFormState}
       onSubmit={(e: any) => {
         forwardToStripe(e);
