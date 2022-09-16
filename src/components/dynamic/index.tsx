@@ -1,14 +1,42 @@
 import Pages from "./pages";
 import Top from "./top";
 import Bottom from "./bottom";
+import Header from "./header";
 import { Wrap } from "../core/ui";
+import { useLocation } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
 
 export default function Content() {
+  const scrollRef: any = useRef();
+  const topRef: any = useRef();
+  const bottomRef: any = useRef();
+  const location = useLocation();
+  const path = location.pathname;
+
+  const [scrollTop, setScrollTop] = useState(0);
+
+  function doScroll(e: any) {
+    setScrollTop(e.target.scrollTop);
+  }
+
+  useEffect(() => {
+    if (path === "") topRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [path]);
+
   return (
-    <Wrap style={{ justifyContent: "space-between" }}>
+    <Wrap
+      onScroll={doScroll}
+      ref={scrollRef}
+      style={{
+        height: "100%",
+        background: "#ffffff",
+        overflow: path === "/order" ? "hidden" : "auto",
+      }}
+    >
+      <Header innerRef={topRef} scrollTop={scrollTop} />
       <Top />
       <Pages />
-      <Bottom />
+      <Bottom innerRef={bottomRef} />
     </Wrap>
   );
 }

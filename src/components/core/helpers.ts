@@ -24,3 +24,5 @@ export function getPriceFromFormForStripe(schema: any, values: any) {
   // stripe uses cents with no decimals
   return getPriceFromForm(schema, values) * 100
 }
+
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

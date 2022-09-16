@@ -1,98 +1,56 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { redirect } from "../../core/helpers";
-import { headers } from "./constants";
-import { Modal, ModalBody, Button } from "../../core/ui";
-import OrderWrapper from "../pages/order";
+import { Button, Img } from "../../core/ui";
 
-export default function Top() {
-  const [showModal, setShowModal] = useState(false);
+export default function Top({ innerRef }: any) {
   const navigate = useNavigate();
-  const currentPath = window.location.pathname;
-
   return (
-    <>
-      <Spacer />
+    <TopWrap>
+      <Title>Lazy Cow Bakery</Title>
+
+      <Sub>100% plant-based</Sub>
       <Spacer />
 
-      <Col>
-        <Title>Lazy Cow Bakery</Title>
-        <Spacer />
-        <Sub>100% plant-based</Sub>
-        {/* <Spacer />
-        <Button onClick={() => setShowModal(true)}>ORDER A CAKE</Button> */}
-      </Col>
-      <Spacer />
-      <Row>
-        {headers.map((h, i) => {
-          const selected = currentPath === h.to;
-          return (
-            <Button
-              key={"header" + i}
-              style={{
-                fontWeight: 900,
-                color: selected ? "#be9514" : null,
-              }}
-              onClick={() => {
-                if (h.link) redirect(h.link);
-                else navigate(h.to || "/");
-              }}
-            >
-              {h.title.toUpperCase()}
-            </Button>
-          );
-        })}
-      </Row>
-
-      <Modal open={showModal} onClose={() => setShowModal(false)}>
-        <ModalBody>
-          <OrderWrapper />
-        </ModalBody>
-      </Modal>
-    </>
+      <Button
+        variant='contained'
+        style={{ fontSize: 100, background: "purple", color: "#fff7dc" }}
+        size={"large"}
+        onClick={() => navigate("order")}
+      >
+        ORDER A CAKE
+      </Button>
+    </TopWrap>
   );
 }
 
-const Link = styled.div`
-  cursor: pointer;
-  letter-spacing: -0.2px;
-`;
-
 const Spacer = styled.div`
-  height: 30px;
+  height: 60px;
 `;
 
-const Col = styled.div`
+const TopWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 20px);
   color: #639aff;
   font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-`;
+  padding: 140px 10px;
 
-const Row = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 50px;
-  color: #639aff;
-  font-weight: 700;
-  text-transform: uppercase;
+  background-image: url("${(p) => "images/lazy_crew.webp"}");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const Title = styled.div`
-  font-size: 50px;
-  text-align: center;
-  width: 300px;
+  font-size: 70px;
+  // text-align: center;
+  // width: 380px;
+  margin-bottom: 30px;
 `;
 
 const Sub = styled.div`
   font-size: 14px;
-  color: #000;
+  color: #fff;
 `;
