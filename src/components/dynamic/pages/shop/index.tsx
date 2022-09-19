@@ -11,17 +11,31 @@ import {
   IconButton,
   Button,
 } from "../../../core/ui";
+import * as mui from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
 import {
   Add,
   Close,
   Delete,
-  Remove,
   ShoppingCart,
-  ShoppingCartCheckout,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
 import { getShopItemsFromStripe } from "../../../../network/actions";
 import { fakeItems } from "./constants";
+
+const accentColor = "#FF007F";
+
+const StyledBadge = mui.styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -5,
+    top: 0,
+    fontSize: 15,
+    borderRadius: 100,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "10px 6px",
+    background: accentColor,
+  },
+}));
 
 export default function Shopper({ innerRef }: any) {
   const [visible, setVisible] = useState(false);
@@ -86,6 +100,11 @@ export default function Shopper({ innerRef }: any) {
   const headerHeight = 100 - headerPadding * 2;
 
   const cartIsEmpty = !Object.keys(cart).length;
+
+  let cartSum = 0;
+  Object.keys(cart).forEach((k) => {
+    cartSum += cart[k];
+  });
   return (
     <FadeIn
       fullScreen
@@ -112,13 +131,15 @@ export default function Shopper({ innerRef }: any) {
               size='large'
               onClick={() => setShowCart(false)}
             >
-              {cartIsEmpty ? (
-                <ShoppingCartOutlined
-                  style={{ fontSize: 30, color: "#1976d2" }}
-                />
-              ) : (
-                <ShoppingCart style={{ fontSize: 30, color: "#1976d2" }} />
-              )}
+              <StyledBadge badgeContent={cartSum} color='secondary'>
+                {cartIsEmpty ? (
+                  <ShoppingCartOutlined
+                    style={{ fontSize: 30, color: "#1976d2" }}
+                  />
+                ) : (
+                  <ShoppingCart style={{ fontSize: 30, color: "#1976d2" }} />
+                )}
+              </StyledBadge>
             </IconButton>
             <Button variant='contained'>Checkout</Button>
           </Row>
@@ -232,11 +253,12 @@ const ItemOverlay = styled.div`
   left: 0;
   height: 100%;
   width: 100%;
-  background: #ffffff55;
+  background: #00000055;
 `;
 
 const Quantity = styled.div`
   font-size: 70px;
+  color: #fff;
 `;
 
 const ItemLabel = styled.div`
@@ -249,6 +271,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+  z-index: 20;
 `;
 
 const Item = styled.div`
