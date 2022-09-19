@@ -52,26 +52,27 @@ export const customCake = [
     label: "Base",
     type: "toggleButtons",
     options: ["Heart", "Round"],
+    neverNull: true,
     page: 3,
     validator: strValidator,
   },
   {
     name: "cake_top",
-    label: "Top",
+    label: "Top Trim",
     type: "toggleButtons",
     options: ["Shell", "Ruffles", "Rosettes"],
     page: 3,
   },
   {
     name: "cake_bottom",
-    label: "Bottom",
+    label: "Bottom Trim",
     type: "toggleButtons",
-    options: ["Shell", "Ruffles", "Heart Line", "Rosettes"],
+    options: ["Shell", "Ruffles", "Heart Line"],
     page: 3,
   },
   {
     name: "cake_side",
-    label: "Side",
+    label: "Side Trim",
     type: "toggleButtons",
     options: [
       "Double String",
@@ -160,8 +161,15 @@ export const cakeSchema = [
     validator: strValidator,
   },
   {
-    name: "name",
-    label: "Your Name",
+    name: "first_name",
+    label: "First Name",
+    type: "text",
+    page: 1,
+    validator: strValidator,
+  },
+  {
+    name: "last_name",
+    label: "Last Name",
     type: "text",
     page: 1,
     validator: strValidator,
@@ -188,5 +196,14 @@ export const cakeSchema = [
     type: "toggleButtons",
     page: 2,
     validator: strValidator,
+  },
+];
+
+export const mailingListSchema = [
+  {
+    name: "email",
+    label: "Email",
+    type: "text",
+    validator: emailValidator,
   },
 ];

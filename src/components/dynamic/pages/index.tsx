@@ -1,9 +1,9 @@
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import Home from "./home";
 import About from "./about";
 import Newsletter from "./newsletter";
 import Order from "./order";
+import Shop from "./shop";
 import Press from "./press";
 import { Wrap } from "../../core/ui";
 
@@ -19,26 +19,22 @@ export default function Dynamic() {
   };
 
   const location = useLocation();
-  const path = location.pathname;
 
   useEffect(() => {
-    const thisRef = refsByRoute[path];
+    const thisRef = refsByRoute[location.pathname];
     if (thisRef) {
       thisRef?.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [path]);
+  }, [location]);
 
   return (
     <Wrap>
       <About innerRef={page1} />
-
       <Press innerRef={page2} />
-
       <Newsletter innerRef={page3} />
 
-      {/* <Home innerRef={page5} /> */}
-
       <Order />
+      <Shop />
     </Wrap>
   );
 }

@@ -26,7 +26,7 @@ export const Input:any = styled(mui.Input)`
 
 `;
 export const TextField:any = styled(mui.TextField)`
-
+background:#fff;
 `;
 export const Select:any = styled(mui.Select)`
 
@@ -70,6 +70,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 flex:1;
+width:100%;
 `;
 
 export const PageWrap = styled.div`
@@ -113,3 +114,9 @@ export const Img = styled.div<ImgProps>`
       height: ${(p) => p.isMobile ? '400px' : '440px'};
       width: ${(p) => p.isMobile ? '400px' : '100%'};
       `;
+
+
+export const Title = styled.div`
+  font-size: 36px;
+  margin: 55px 0;
+`;
