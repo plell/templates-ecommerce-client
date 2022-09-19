@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useState } from "react";
 import Form from "./form";
 import { getStripeSession } from "../../network/actions";
 import { loadStripe } from "@stripe/stripe-js";
@@ -22,9 +22,12 @@ export default function Order({
   schema,
   getFormState,
 }: OrderProps) {
+  const [loading, setLoading] = useState(false);
+
   async function forwardToStripe(formValues: any) {
-    const amount = getPriceFromFormForStripe(schema, formValues);
     try {
+      setLoading(true);
+      const amount = getPriceFromFormForStripe(schema, formValues);
       const session: SessionResponse = await getStripeSession({ amount });
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe didnt load");
@@ -33,17 +36,21 @@ export default function Order({
       });
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   }
 
   return (
     <Form
       paged
+      loading={loading}
       getFormState={getFormState}
+      validateOnMount={true}
       onSubmit={(e: any) => {
         forwardToStripe(e);
       }}
       initialValues={initialValues}
+      submitText={"Checkout"}
       schema={schema}
     />
   );
