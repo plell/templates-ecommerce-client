@@ -1,27 +1,30 @@
 
 export const headers = [
-    {
-      title: "Top",
-      to: "/",
-    },
+    
     {
       title: "About",
       to: "/about",
+  },
+  {
+    title: "Order A Cake",
+    to: "/order",
+  },
+  {
+    title: "Shop",
+    to: "/shop",
+  },
+    {
+      title: "Press",
+      to: "/press",
     },
     {
       title: "Newsletter",
       to: "/newsletter",
     },
-    {
-      title: "Order A Cake",
-      to: "/order",
-    },
-    {
-      title: "Cake Gallery",
-      link: "https://www.instagram.com/lazycowbakery/",
-    },
-    {
-      title: "Press",
-      to: "/press",
-    },
+    
+    // {
+    //   title: "Cake Gallery",
+    //   link: "https://www.instagram.com/lazycowbakery/",
+    // },
+    
   ];

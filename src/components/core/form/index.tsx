@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import styled from "styled-components";
 import { Button, FadeIn, IconButton } from "../ui";
 import Input from "./inputs";
-import { getPriceFromForm } from "../helpers";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { sleep } from "../helpers";
 
@@ -20,6 +19,7 @@ type FormProps = {
   submitText?: string;
   loading?: boolean;
   disabled?: boolean;
+  validateOnMount?: boolean;
 };
 
 export default function Form(props: FormProps) {
@@ -91,7 +91,7 @@ export default function Form(props: FormProps) {
         id={"order-form"}
         initialValues={props.initialValues || {}}
         onSubmit={props.onSubmit}
-        validateOnMount
+        validateOnMount={props.validateOnMount}
         innerRef={formRef}
         enableReinitialize={true}
         validationSchema={validator(props.schema)}
@@ -100,6 +100,7 @@ export default function Form(props: FormProps) {
           setFieldTouched,
           handleSubmit,
           values,
+          resetForm,
           setValues,
           setFieldValue,
           errors,
@@ -121,10 +122,10 @@ export default function Form(props: FormProps) {
                 <>
                   <InputWrap>
                     {schema
-                      ?.filter(
-                        (f: any) =>
-                          (page > 1 && f.persistHeader) || f.page === page
-                      )
+                      ?.filter((f: any) => {
+                        if (!props.paged) return true;
+                        return (page > 1 && f.persistHeader) || f.page === page;
+                      })
                       .map((item: any, index: number) => (
                         <Input
                           {...item}
@@ -189,16 +190,20 @@ export default function Form(props: FormProps) {
                         props.disabled ||
                         props.loading
                       }
+                      loading={props.loading}
                       onClick={async () => {
-                        if (lastPage === page) handleSubmit();
-                        else {
+                        if (!props.paged || lastPage === page) {
+                          handleSubmit();
+                        } else {
                           if (validateErrors(errors)) doPageTurn(page + 1);
                           else console.log(errors);
                         }
                       }}
                     >
-                      {lastPage > 1 && lastPage === page
-                        ? props.submitText || "Checkout"
+                      {!props.paged
+                        ? props.submitText
+                        : lastPage > 1 && lastPage === page
+                        ? props.submitText || "Submit"
                         : `Next (${page}/${lastPage})`}
                     </Button>
                   </div>
@@ -224,9 +229,7 @@ const Wrap = styled.div`
   min-width: 380px;
 `;
 
-const InputWrap = styled.div`
-  min-height: 200px;
-`;
+const InputWrap = styled.div``;
 
 function validator(config: any) {
   const shape: any = {};

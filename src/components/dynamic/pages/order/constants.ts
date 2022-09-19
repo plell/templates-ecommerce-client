@@ -14,11 +14,11 @@ import { DAYS_BEFORE_PICKUP } from '../../../../constants'
     },
   ];
   
-  export const initialValues = {
+export const initialValues:any = {
     cake_size: "6-inch",
     cake_type: "Choose a Preset Cake",
     cake_design: 'Baby Blue w/ Cherries',
-    pickup_date: moment().add(DAYS_BEFORE_PICKUP,'days').format()
+    pickup_date: moment().add(DAYS_BEFORE_PICKUP,'days').format()  
   };
 
 
@@ -75,7 +75,9 @@ const heartOptions: any = {
      if (typeof value === 'string') {
        let imgKey = keyname + '_' + value
        //only one key for cake text
-       if (keyname==='cake_text') imgKey = 'cake_text'
+       if (keyname === 'cake_text' && value) {
+         imgKey = 'cake_text'
+       }
        let imgUrl: string = cakeImages[`${imgKey}`]
        
        if (imgUrl) {
@@ -85,6 +87,12 @@ const heartOptions: any = {
            console.log('imgUrl',imgUrl)
          }
          imgs.push(imgUrl)
+
+         if (imgUrl.includes('color')) {
+           // add lines
+           let lineImgUrl = imgUrl.replace('color','line')
+           imgs.push(lineImgUrl)
+         }
        }
      }
    })

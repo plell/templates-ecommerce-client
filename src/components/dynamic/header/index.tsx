@@ -1,18 +1,26 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { redirect } from "../../core/helpers";
 import { headers } from "./constants";
 import { Button, FadeIn, Img, Row } from "../../core/ui";
 
-export default function Header({ innerRef, scrollTop }: any) {
+export default function Header({ scrollTop }: any) {
   const navigate = useNavigate();
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const topRef: any = useRef();
+  const path = location.pathname;
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      topRef?.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location]);
 
   const headerHeight = 60;
+  const logo = <Img style={{ height: 60, width: 60 }} src={"cowbaby.webp"} />;
 
   const header = (
     <Row
-      ref={innerRef}
       style={{
         height: headerHeight,
         width: "calc(100% - 40px)",
@@ -22,13 +30,18 @@ export default function Header({ innerRef, scrollTop }: any) {
         boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.15)",
       }}
     >
-      <Img
-        src={"cowbaby.webp"}
-        style={{ height: 60, width: 60, marginRight: 20 }}
-      />
+      <div
+        style={{ cursor: "pointer", marginRight: 20 }}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        {logo}
+      </div>
+
       <>
         {headers.map((h: any, i: number) => {
-          const selected = currentPath === h.to;
+          const selected = path === h.to;
           return (
             <Button
               // variant='contained'
@@ -73,6 +86,7 @@ export default function Header({ innerRef, scrollTop }: any) {
 
   return (
     <>
+      <div ref={topRef} />
       {header}
       {floatingHeader}
     </>

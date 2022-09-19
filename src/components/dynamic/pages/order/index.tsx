@@ -11,6 +11,7 @@ import Order from "../../../core/order";
 import { Img, Wrap, Row, FadeIn, IconButton } from "../../../core/ui";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { getPriceFromForm } from "../../../core/helpers";
+import { Close } from "@mui/icons-material";
 
 export default function OrderWrapper({ innerRef }: any) {
   const [showOrder, setShowOrder] = useState(false);
@@ -42,6 +43,10 @@ export default function OrderWrapper({ innerRef }: any) {
     schema.splice(textIndex, 1);
   }
 
+  if (formState?.cake_type === cakeTypes.preset.label) {
+    initialValues["cake_base"] = "Round";
+  }
+
   const imgs: string[] = doCakeImages(schema, formState);
 
   if (!imgs.length) imgs.push(cakeImages["cake_base_Round"]);
@@ -62,7 +67,7 @@ export default function OrderWrapper({ innerRef }: any) {
       <>
         <Header style={{ height: headerHeight, padding: headerPadding }}>
           <IconButton onClick={() => setShowOrder(false)}>
-            <ArrowBack style={{ fontSize: 40 }} />
+            <Close style={{ fontSize: 40 }} />
           </IconButton>
 
           <Title>Order a Cake</Title>

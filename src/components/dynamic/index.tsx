@@ -8,7 +8,6 @@ import { useRef, useState, useEffect } from "react";
 
 export default function Content() {
   const scrollRef: any = useRef();
-  const topRef: any = useRef();
   const bottomRef: any = useRef();
   const location = useLocation();
   const path = location.pathname;
@@ -18,10 +17,6 @@ export default function Content() {
   function doScroll(e: any) {
     setScrollTop(e.target.scrollTop);
   }
-
-  useEffect(() => {
-    if (path === "") topRef?.current?.scrollIntoView({ behavior: "smooth" });
-  }, [path]);
 
   return (
     <Wrap
@@ -33,9 +28,11 @@ export default function Content() {
         overflow: path === "/order" ? "hidden" : "auto",
       }}
     >
-      <Header innerRef={topRef} scrollTop={scrollTop} />
+      <Header scrollTop={scrollTop} />
       <Top />
       <Pages />
+
+      <div style={{ minHeight: 200 }} />
       <Bottom innerRef={bottomRef} />
     </Wrap>
   );
