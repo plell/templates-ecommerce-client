@@ -199,6 +199,43 @@ export const cakeSchema = [
   },
 ];
 
+export const shopSchema = [
+  {
+    name: "pickup_date",
+    label: "Pickup Date",
+    type: "date",
+    validator: strValidator,
+  },
+  {
+    name: "first_name",
+    label: "First Name",
+    type: "text",
+    page: 1,
+    validator: strValidator,
+  },
+  {
+    name: "last_name",
+    label: "Last Name",
+    type: "text",
+    page: 1,
+    validator: strValidator,
+  },
+  {
+    name: "phone",
+    label: "Phone",
+    type: "number",
+    page: 1,
+    validator: phoneValidator,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "text",
+    page: 1,
+    validator: emailValidator,
+  },
+];
+
 export const mailingListSchema = [
   {
     name: "email",

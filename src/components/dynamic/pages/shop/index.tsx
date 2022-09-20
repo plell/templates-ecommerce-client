@@ -10,6 +10,9 @@ import {
   FadeIn,
   IconButton,
   Button,
+  Modal,
+  ModalBody,
+  TextField,
 } from "../../../core/ui";
 import * as mui from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
@@ -20,8 +23,18 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { getShopItemsFromStripe } from "../../../../network/actions";
-import { fakeItems } from "./constants";
+import {
+  getProductsFromStripe,
+  getStripeProductSession,
+} from "../../../../network/actions";
+import { fakeItems, initialValues } from "./constants";
+import { loadStripe } from "@stripe/stripe-js";
+import { SessionResponse } from "../../../../types";
+import Form from "../../../core/form";
+import { shopSchema } from "../../../core/form/schema";
+
+const pk = process.env.REACT_APP_STRIPE_PUBLIC_KEY || "none";
+const stripePromise = loadStripe(pk);
 
 const accentColor = "#FF007F";
 
@@ -40,9 +53,11 @@ const StyledBadge = mui.styled(Badge)(({ theme }) => ({
 export default function Shopper({ innerRef }: any) {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [focusedItem, setFocusedItem]: any = useState(null);
   const [items, setItems]: any = useState([]);
   const [cart, setCart]: any = useState({});
   const [showCart, setShowCart]: any = useState(false);
+  const [showCheckout, setShowCheckout]: any = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,18 +68,13 @@ export default function Shopper({ innerRef }: any) {
   }, [location]);
 
   useEffect(() => {
-    setItems(fakeItems);
+    getItemsFromStripe();
   }, []);
-
-  useEffect(() => {
-    // do cart animation
-    console.log("do cart animation");
-  }, [cart]);
 
   async function getItemsFromStripe() {
     setLoading(true);
     try {
-      const res = await getShopItemsFromStripe();
+      const res = await getProductsFromStripe();
       setItems(res);
     } catch (e) {
       console.log(e);
@@ -72,19 +82,48 @@ export default function Shopper({ innerRef }: any) {
     setLoading(false);
   }
 
+  function cartWithoutNulls() {
+    const c = { ...cart };
+    Object.keys(c).forEach((key) => {
+      const v = c[key];
+      if (!v) delete c[key];
+    });
+    return c;
+  }
+
+  async function forwardToStripe(values: any) {
+    const products = cartWithoutNulls();
+
+    try {
+      setLoading(true);
+      const session: SessionResponse = await getStripeProductSession({
+        products: products,
+        customer: {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          phone: values.phone,
+          email: values.email,
+          pickup_date: values.pickup_date,
+        },
+      });
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Stripe didnt load");
+      await stripe.redirectToCheckout({
+        sessionId: session.sessionId,
+      });
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+    }
+  }
+
   function editCart(key: string, value: number) {
     const c = { ...cart };
-    let newValue = 0;
-    if (c[key]) {
-      newValue = c[key] + value;
-    } else {
-      newValue = value;
-    }
 
-    if (newValue > -1) {
-      c[key] = newValue;
-    } else {
+    if (value < 1) {
       delete c[key];
+    } else {
+      c[key] = value;
     }
 
     setCart(c);
@@ -102,9 +141,83 @@ export default function Shopper({ innerRef }: any) {
   const cartIsEmpty = !Object.keys(cart).length;
 
   let cartSum = 0;
+  let subtotal = 0;
   Object.keys(cart).forEach((k) => {
-    cartSum += cart[k];
+    console.log("k", k);
+    console.log("cart[k]", cart[k]);
+    if (cart[k]) {
+      const quantity = parseInt(cart[k]);
+      cartSum += quantity;
+      const thisItem = items?.find((f: any) => f.product_id === k);
+      const itemOrderPrice = quantity * parseInt(thisItem.price);
+      subtotal += itemOrderPrice;
+    }
   });
+
+  const cartList = (
+    <Col style={{ width: "100%" }}>
+      {Object.keys(cart).map((product_id: string, index: number) => {
+        const amt = cart[product_id];
+        if (!amt) return;
+        const item = items.find((f: any) => f.product_id === product_id);
+        return (
+          <Row
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+            key={"cart_" + index}
+          >
+            <Row style={{ alignItems: "center" }}>
+              <IconButton
+                style={{ marginRight: 10 }}
+                onClick={() => removeFromCart(product_id)}
+                size='small'
+              >
+                <Close />
+              </IconButton>
+              <CartItemLabel>
+                {item?.label} (${item?.price?.toFixed(2)})
+              </CartItemLabel>
+            </Row>
+            <TextField
+              type={"number"}
+              height={20}
+              padding={10}
+              maxLength={"100"}
+              style={{ width: 80, minWidth: 60 }}
+              onChange={(e: any) => {
+                const val = e.target.value;
+                if (val > 100) return;
+                editCart(product_id, val);
+              }}
+              value={amt}
+            />
+          </Row>
+        );
+      })}
+
+      {!Object.keys(cart).filter((p_id: string) => {
+        const amt = cart[p_id];
+        return amt ? true : false;
+      }).length && (
+        <div style={{ marginBottom: 10 }}>No items in your cart</div>
+      )}
+
+      <Row
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 40,
+        }}
+      >
+        <div>SUBTOTAL:</div>
+        <Total>${subtotal?.toFixed(2)}</Total>
+      </Row>
+    </Col>
+  );
+
   return (
     <FadeIn
       fullScreen
@@ -129,7 +242,7 @@ export default function Shopper({ innerRef }: any) {
               style={{ marginRight: 30, border: "1px solid #1976d2" }}
               variant={cartIsEmpty ? "outlined" : "contained"}
               size='large'
-              onClick={() => setShowCart(false)}
+              onClick={() => setShowCart(true)}
             >
               <StyledBadge badgeContent={cartSum} color='secondary'>
                 {cartIsEmpty ? (
@@ -141,7 +254,13 @@ export default function Shopper({ innerRef }: any) {
                 )}
               </StyledBadge>
             </IconButton>
-            <Button variant='contained'>Checkout</Button>
+            <Button
+              disabled={cartSum < 1}
+              variant='contained'
+              onClick={() => setShowCheckout(true)}
+            >
+              Checkout
+            </Button>
           </Row>
         </Header>
 
@@ -160,89 +279,206 @@ export default function Shopper({ innerRef }: any) {
             }}
           >
             {items?.map((item: any, index: number) => {
-              const product_id = item.product_id;
-              console.log("product_id", product_id);
-
-              let amount = cart[product_id] !== 0 && cart[product_id];
               return (
-                <Item key={"items" + index}>
-                  <Img
-                    style={{
-                      width: "100%",
-                      height: 300,
-                      backgroundSize: "cover",
-                      position: "relative",
-                    }}
-                    src={"bakery.jpg"}
-                  >
-                    {amount && (
-                      <ItemOverlay>
-                        <Quantity>{amount}</Quantity>
-                      </ItemOverlay>
-                    )}
-                  </Img>
-                  <Col
-                    style={{
-                      padding: 20,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Row style={{ minHeight: 70 }}>
-                      <ItemLabel>{item.label}</ItemLabel>
-                    </Row>
-                    {/* <Row style={{ height: 50 }}>
-                      {item.options?.map((o: any, i: number) => {
-                        return (
-                          <Option key={index + "_options_" + i}>
-                            {o.label}
-                          </Option>
-                        );
-                      })}
-                    </Row> */}
-
-                    <Row
-                      style={{
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      {amount ? (
-                        <Button
-                          size='large'
-                          variant='outlined'
-                          onClick={() => removeFromCart(product_id)}
-                          style={{
-                            height: 50,
-                            color: "#888",
-                            borderColor: "#888",
-                          }}
-                        >
-                          <Delete />
-                        </Button>
-                      ) : (
-                        <div />
-                      )}
-
-                      <Button
-                        startIcon={<Add />}
-                        size='large'
-                        variant='contained'
-                        onClick={() => editCart(product_id, 1)}
-                      >
-                        Add
-                      </Button>
-                    </Row>
-                  </Col>
-                </Item>
+                <ItemComponent
+                  removeFromCart={removeFromCart}
+                  setFocusedItem={setFocusedItem}
+                  editCart={editCart}
+                  cart={cart}
+                  item={item}
+                  index={index}
+                />
               );
             })}
           </Row>
           <div style={{ height: 100, minHeight: 100 }} />
         </Wrap>
+
+        <Modal open={showCart} onClose={() => setShowCart(false)}>
+          <ModalBody>
+            {cartList}
+
+            <Button
+              disabled={cartSum < 1}
+              style={{ width: "100%", marginTop: 30 }}
+              variant='contained'
+              onClick={() => {
+                setShowCart(false);
+                setShowCheckout(true);
+              }}
+            >
+              Checkout
+            </Button>
+          </ModalBody>
+        </Modal>
+
+        <Modal
+          open={focusedItem ? true : false}
+          onClose={() => setFocusedItem(null)}
+        >
+          <ModalBody>
+            <ItemComponent
+              readOnly={true}
+              // removeFromCart={removeFromCart}
+              // setShowDescription={setShowDescription}
+              // editCart={editCart}
+              cart={cart}
+              item={focusedItem}
+            />
+          </ModalBody>
+        </Modal>
+
+        <FadeIn
+          drift={40}
+          fullScreen
+          withOverlay
+          close={() => setShowCheckout(false)}
+          style={{
+            overflow: "hidden",
+            zIndex: 100,
+            // display: "flex",
+            // justifyContent: "flex-end",
+          }}
+          isMounted={showCheckout}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              overflow: "auto",
+              left: "calc(100% - 500px)",
+              width: 500 - 80,
+              background: "#fff",
+              padding: 40,
+              display: "flex",
+              flexDirection: "column",
+              height: "calc(100% - 80px)",
+            }}
+          >
+            <div style={{ marginBottom: 20 }}>Shopping Cart</div>
+            <div
+              style={{
+                borderRadius: 6,
+                padding: 20,
+                paddingTop: 30,
+                border: "1px solid #999",
+                marginBottom: 50,
+              }}
+            >
+              {cartList}
+            </div>
+
+            <Form
+              initialValues={initialValues}
+              getFormState={() => console.log("form state")}
+              schema={shopSchema}
+              disabled={cartSum < 1}
+              submitText={"Final Checkout"}
+              buttonStyle={{
+                marginTop: 20,
+                width: "100%",
+              }}
+              onSubmit={forwardToStripe}
+            />
+          </div>
+        </FadeIn>
       </>
     </FadeIn>
   );
 }
+
+const ItemComponent = ({
+  readOnly,
+  index,
+  cart,
+  item,
+  removeFromCart,
+  setFocusedItem,
+  editCart,
+}: any) => {
+  const product_id = item.product_id;
+  let amount = cart[product_id] !== 0 && cart[product_id];
+
+  const textOverflowStyle = readOnly ? {} : {};
+  return (
+    <Item style={{ marginBottom: readOnly && 0 }} key={"items" + index}>
+      <Img
+        style={{
+          width: "100%",
+          height: 300,
+          backgroundSize: "cover",
+          position: "relative",
+        }}
+        src={"bakery.jpg"}
+      >
+        {!readOnly && amount && (
+          <>
+            <Button
+              size='large'
+              variant='contained'
+              onClick={() => removeFromCart(product_id)}
+              style={{
+                height: 60,
+                width: 60,
+                background: "#333",
+                zIndex: 10,
+              }}
+            >
+              <Close />
+            </Button>
+
+            <ItemOverlay>
+              <Quantity>{amount}</Quantity>
+            </ItemOverlay>
+          </>
+        )}
+
+        <Price>${item.price?.toFixed(2)}</Price>
+      </Img>
+      <Col
+        style={{
+          padding: 20,
+          justifyContent: "center",
+        }}
+      >
+        <TextWrap
+          onClick={() => {
+            if (!readOnly) setFocusedItem(item);
+          }}
+        >
+          <ItemLabel style={textOverflowStyle}>{item.label}</ItemLabel>
+          <ItemDescription style={textOverflowStyle}>
+            {item.description}
+          </ItemDescription>
+        </TextWrap>
+        {/* <Row style={{ height: 50 }}>
+      {item.options?.map((o: any, i: number) => {
+        return (
+          <Option key={index + "_options_" + i}>
+            {o.label}
+          </Option>
+        );
+      })}
+    </Row> */}
+
+        {!readOnly && (
+          <Button
+            startIcon={<Add />}
+            size='large'
+            variant='contained'
+            style={{ width: "100%" }}
+            onClick={() => {
+              let amt = amount || 0;
+              editCart(product_id, amt + 1);
+            }}
+          >
+            Add
+          </Button>
+        )}
+      </Col>
+    </Item>
+  );
+};
 
 const ItemOverlay = styled.div`
   display: flex;
@@ -254,16 +490,52 @@ const ItemOverlay = styled.div`
   height: 100%;
   width: 100%;
   background: #00000055;
+  z-index: 2;
 `;
+
+const Total = styled.div``;
 
 const Quantity = styled.div`
   font-size: 70px;
   color: #fff;
 `;
 
+const TextWrap = styled.div`
+  cursor: pointer;
+`;
+
 const ItemLabel = styled.div`
-  font-size: 20px;
   margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+`;
+
+const ItemDescription = styled.div`
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+`;
+
+const CartItemLabel = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const Header = styled.div`
@@ -276,8 +548,6 @@ const Header = styled.div`
 
 const Item = styled.div`
   width: 320px;
-
-  // margin-right: 40px;
   margin-bottom: 40px;
   background: #ffffff;
   border-radius: 6px;
@@ -302,8 +572,14 @@ const Option = styled.div`
 
 const Price = styled.div`
   font-size: 20px;
-  line-height: 30px;
-  font-weight: 600;
+  font-weight: 400;
+  border-top-left-radius: 6px;
+  display: flex;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: #ffffffcc;
   color: #000;
 `;
 

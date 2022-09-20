@@ -16,17 +16,29 @@ flex-direction:column;
 // justify-content:center;
 align-items:center;
 padding:40px;
+border-radius:10px;
 min-width:280px;
-min-height:200px;
+min-height:100px;
+max-height:600px;
 background:#fff;
+overflow:auto;
 `;
 
 
 export const Input:any = styled(mui.Input)`
 
 `;
-export const TextField:any = styled(mui.TextField)`
+type TextFieldProps = {
+      height?: number;
+      padding?: number;
+}
+export const TextField:any = styled(mui.TextField)<TextFieldProps>`
 background:#fff;
+
+input {
+      height: ${(p) => p.height && p.height + 'px'};
+      padding: ${(p) => p.padding && p.padding + 'px'};
+}
 `;
 export const Select:any = styled(mui.Select)`
 
