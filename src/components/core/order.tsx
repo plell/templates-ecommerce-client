@@ -1,17 +1,14 @@
 import { useState } from "react";
 import Form from "./form";
-import { getStripeSession } from "../../network/actions";
+import { getStripeAmountSession } from "../../network/actions";
 import { loadStripe } from "@stripe/stripe-js";
 import { getPriceFromFormForStripe } from "../core/helpers";
+import { SessionResponse } from "../../types";
 
 type OrderProps = {
   initialValues: any;
   schema: any;
   getFormState: (values: any) => void;
-};
-
-type SessionResponse = {
-  sessionId: string;
 };
 
 const pk = process.env.REACT_APP_STRIPE_PUBLIC_KEY || "none";
@@ -28,7 +25,7 @@ export default function Order({
     try {
       setLoading(true);
       const amount = getPriceFromFormForStripe(schema, formValues);
-      const session: SessionResponse = await getStripeSession({ amount });
+      const session: SessionResponse = await getStripeAmountSession({ amount });
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe didnt load");
       await stripe.redirectToCheckout({

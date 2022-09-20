@@ -73,7 +73,7 @@ export default function OrderWrapper({ innerRef }: any) {
           <Title>Order a Cake</Title>
 
           <Total>
-            TOTAL:{" "}
+            SUBTOTAL:{" "}
             <Price>${getPriceFromForm(schema, formState).toFixed(2)} USD</Price>
           </Total>
         </Header>

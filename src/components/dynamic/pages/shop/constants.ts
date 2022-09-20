@@ -1,10 +1,9 @@
 
 import moment from "moment";
-  
+import { DAYS_BEFORE_PICKUP } from "../../../../constants";
+
 export const initialValues:any = {
-    cake_size: "6-inch",
-    cake_type: "Choose a Preset Cake",
-    cake_design: 'Baby Blue w/ Cherries',
+    pickup_date: moment().add(DAYS_BEFORE_PICKUP,'days').format()  
   };
 
 export const fakeItems = [
