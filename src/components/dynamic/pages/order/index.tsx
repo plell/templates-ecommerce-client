@@ -97,7 +97,7 @@ export default function OrderWrapper({ innerRef }: any) {
                 return (
                   <Img
                     key={"img" + i}
-                    src={`cake/${c}`}
+                    src={`images/cake/${c}`}
                     style={{
                       position: "absolute",
                       top: 0,

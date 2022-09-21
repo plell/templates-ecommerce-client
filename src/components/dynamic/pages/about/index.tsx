@@ -16,7 +16,7 @@ export default function About({ innerRef }: any) {
         <W />
 
         <Col>
-          <Img style={{ height: 688, width: 461 }} src={"bakery.jpg"} />
+          <Img style={{ height: 688, width: 461 }} src={"images/bakery.jpg"} />
         </Col>
       </Row>
 
@@ -40,7 +40,10 @@ export default function About({ innerRef }: any) {
             </Col>
 
             <Col>
-              <Img src={m.img} style={{ height: 466, width: 391 }} />
+              <Img
+                src={"images/" + m.img}
+                style={{ height: 466, width: 391 }}
+              />
             </Col>
           </Row>
         );
