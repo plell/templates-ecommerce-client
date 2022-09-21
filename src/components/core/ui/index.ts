@@ -119,7 +119,7 @@ type ImgProps = {
 }
 
 export const Img = styled.div<ImgProps>`
-      background-image: url("${(p) => 'images/'+p.src}");
+      background-image: url("${(p) => p.src}");
       background-position: center;
       background-size: contain;
       background-repeat:no-repeat;

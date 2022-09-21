@@ -50,6 +50,15 @@ const StyledBadge = mui.styled(Badge)(({ theme }) => ({
   },
 }));
 
+function convertPrice(price: string | null): number {
+  let p = 0;
+  if (price) {
+    // stripe uses cents
+    p = parseInt(price) / 100;
+  }
+  return p;
+}
+
 export default function Shopper({ innerRef }: any) {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,8 +77,8 @@ export default function Shopper({ innerRef }: any) {
   }, [location]);
 
   useEffect(() => {
-    getItemsFromStripe();
-  }, []);
+    if (visible) getItemsFromStripe();
+  }, [visible]);
 
   async function getItemsFromStripe() {
     setLoading(true);
@@ -143,23 +152,22 @@ export default function Shopper({ innerRef }: any) {
   let cartSum = 0;
   let subtotal = 0;
   Object.keys(cart).forEach((k) => {
-    console.log("k", k);
-    console.log("cart[k]", cart[k]);
     if (cart[k]) {
       const quantity = parseInt(cart[k]);
       cartSum += quantity;
-      const thisItem = items?.find((f: any) => f.product_id === k);
-      const itemOrderPrice = quantity * parseInt(thisItem.price);
+      const thisItem = items?.find((f: any) => f.id === k);
+      const price = convertPrice(thisItem?.metadata?.price);
+      const itemOrderPrice = quantity * price;
       subtotal += itemOrderPrice;
     }
   });
 
   const cartList = (
     <Col style={{ width: "100%" }}>
-      {Object.keys(cart).map((product_id: string, index: number) => {
-        const amt = cart[product_id];
-        if (!amt) return;
-        const item = items.find((f: any) => f.product_id === product_id);
+      {Object.keys(cart).map((id: string, index: number) => {
+        const amt = cart[id];
+        const item = items.find((f: any) => f.id === id);
+        const price = convertPrice(item?.metadata?.price).toFixed(2);
         return (
           <Row
             style={{
@@ -172,13 +180,13 @@ export default function Shopper({ innerRef }: any) {
             <Row style={{ alignItems: "center" }}>
               <IconButton
                 style={{ marginRight: 10 }}
-                onClick={() => removeFromCart(product_id)}
+                onClick={() => removeFromCart(id)}
                 size='small'
               >
                 <Close />
               </IconButton>
               <CartItemLabel>
-                {item?.label} (${item?.price?.toFixed(2)})
+                {item?.name} (${price})
               </CartItemLabel>
             </Row>
             <TextField
@@ -190,7 +198,7 @@ export default function Shopper({ innerRef }: any) {
               onChange={(e: any) => {
                 const val = e.target.value;
                 if (val > 100) return;
-                editCart(product_id, val);
+                editCart(id, val);
               }}
               value={amt}
             />
@@ -275,7 +283,8 @@ export default function Shopper({ innerRef }: any) {
             style={{
               flexWrap: "wrap",
               justifyContent: "space-evenly",
-              padding: 40,
+              padding: "40px 0",
+              width: "100%",
             }}
           >
             {items?.map((item: any, index: number) => {
@@ -396,10 +405,13 @@ const ItemComponent = ({
   setFocusedItem,
   editCart,
 }: any) => {
-  const product_id = item.product_id;
-  let amount = cart[product_id] !== 0 && cart[product_id];
+  const id = item.id;
+  let amount = cart[id] !== 0 && cart[id];
 
   const textOverflowStyle = readOnly ? {} : {};
+
+  const price = convertPrice(item.metadata?.price).toFixed(2);
+
   return (
     <Item style={{ marginBottom: readOnly && 0 }} key={"items" + index}>
       <Img
@@ -409,14 +421,14 @@ const ItemComponent = ({
           backgroundSize: "cover",
           position: "relative",
         }}
-        src={"bakery.jpg"}
+        src={(item.images?.length && item.images[0]) || "noimage.jpg"}
       >
         {!readOnly && amount && (
           <>
             <Button
               size='large'
               variant='contained'
-              onClick={() => removeFromCart(product_id)}
+              onClick={() => removeFromCart(id)}
               style={{
                 height: 60,
                 width: 60,
@@ -433,7 +445,7 @@ const ItemComponent = ({
           </>
         )}
 
-        <Price>${item.price?.toFixed(2)}</Price>
+        <Price>${price}</Price>
       </Img>
       <Col
         style={{
@@ -446,7 +458,7 @@ const ItemComponent = ({
             if (!readOnly) setFocusedItem(item);
           }}
         >
-          <ItemLabel style={textOverflowStyle}>{item.label}</ItemLabel>
+          <ItemLabel style={textOverflowStyle}>{item.name}</ItemLabel>
           <ItemDescription style={textOverflowStyle}>
             {item.description}
           </ItemDescription>
@@ -469,7 +481,7 @@ const ItemComponent = ({
             style={{ width: "100%" }}
             onClick={() => {
               let amt = amount || 0;
-              editCart(product_id, amt + 1);
+              editCart(id, amt + 1);
             }}
           >
             Add
