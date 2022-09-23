@@ -1,11 +1,22 @@
 import api from "./api";
 
-type stripeSessionInput = {
+type stripeAmountSessionInput = {
     amount: number,
+    form:any
 }
 
-export async function getStripeSession(data: stripeSessionInput) {
-    const res = await api.post("stripe/createSessionByCustomer", data);
+type stripeProductSessionInput = {
+    products: any,
+    form:any
+}
+
+export async function getStripeAmountSession(data: stripeAmountSessionInput) {
+    const res = await api.post("stripe/createAmountSessionByCustomer", data);
+    return res
+}
+
+export async function getStripeProductSession(data: stripeProductSessionInput) {
+    const res = await api.post("stripe/createProductSessionByCustomer", data);
     return res
 }
 
@@ -14,11 +25,24 @@ type mailingListInput = {
 }
 
 export async function submitToMailingList(data: mailingListInput) {
-    const res = await api.post(`mail/join/${data.email}`);
+    const res = await api.post(`email/subscribe`,data);
     return res
 }
 
-export async function getShopItemsFromStripe() {
-    const res = await api.get(`stripe/items`);
+type contactFormInput = {
+    email: string,
+    name: string,
+    message: string
+}
+
+export async function sendContactForm(data: contactFormInput) {
+    const res = await api.post(`email/contact`,data);
+    return res
+}
+
+
+
+export async function getProductsFromStripe() {
+    const res = await api.get(`stripe/products`);
     return res
 }

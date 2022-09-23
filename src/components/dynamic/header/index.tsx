@@ -17,7 +17,9 @@ export default function Header({ scrollTop }: any) {
   }, [location]);
 
   const headerHeight = 60;
-  const logo = <Img style={{ height: 60, width: 60 }} src={"cowbaby.webp"} />;
+  const logo = (
+    <Img style={{ height: 60, width: 60 }} src={"images/cowbaby.webp"} />
+  );
 
   const header = (
     <Row

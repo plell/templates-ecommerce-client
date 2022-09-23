@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import * as mui from '@mui/material'
 import { FadeInOverlay } from './animated/fadeInOverlay'
+import CircularProgress from '@mui/material/CircularProgress';
+
+export const Loading = CircularProgress
 
 export const FadeIn = FadeInOverlay
 
@@ -16,17 +19,34 @@ flex-direction:column;
 // justify-content:center;
 align-items:center;
 padding:40px;
+border-radius:10px;
 min-width:280px;
-min-height:200px;
+min-height:100px;
+max-height:600px;
 background:#fff;
+overflow:auto;
 `;
 
 
 export const Input:any = styled(mui.Input)`
 
 `;
-export const TextField:any = styled(mui.TextField)`
+
+export const TextArea:any = styled(mui.TextareaAutosize)`
+min-height:200px;
+`;
+
+type TextFieldProps = {
+      height?: number;
+      padding?: number;
+}
+export const TextField:any = styled(mui.TextField)<TextFieldProps>`
 background:#fff;
+
+input {
+      height: ${(p) => p.height && p.height + 'px'};
+      padding: ${(p) => p.padding && p.padding + 'px'};
+}
 `;
 export const Select:any = styled(mui.Select)`
 
@@ -65,10 +85,15 @@ font-size:20px !important;
 text-transform: none !important;
 `;
 
-export const Wrap = styled.div`
+type WrapProps = {
+      center?: boolean;
+}
+
+export const Wrap = styled.div<WrapProps>`
 display:flex;
 flex-direction:column;
 align-items:center;
+${p=>p.center&&'justify-content:center;'}
 flex:1;
 width:100%;
 `;
@@ -107,7 +132,7 @@ type ImgProps = {
 }
 
 export const Img = styled.div<ImgProps>`
-      background-image: url("${(p) => 'images/'+p.src}");
+      background-image: url("${(p) => p.src}");
       background-position: center;
       background-size: contain;
       background-repeat:no-repeat;

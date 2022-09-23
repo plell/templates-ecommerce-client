@@ -20,6 +20,7 @@ type FormProps = {
   loading?: boolean;
   disabled?: boolean;
   validateOnMount?: boolean;
+  buttonStyle?: any;
 };
 
 export default function Form(props: FormProps) {
@@ -184,6 +185,7 @@ export default function Form(props: FormProps) {
                     )}
 
                     <Button
+                      style={{ ...props.buttonStyle }}
                       variant='contained'
                       disabled={
                         !validateErrors(errors) ||

@@ -20,7 +20,10 @@ export default function Press({ innerRef }: any) {
             </Col>
 
             <Col>
-              <Img src={m.img} style={{ height: 466, width: 391 }} />
+              <Img
+                src={"images/" + m.img}
+                style={{ height: 466, width: 391 }}
+              />
             </Col>
           </Row>
         );
