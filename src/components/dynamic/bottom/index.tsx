@@ -6,7 +6,7 @@ export default function Bottom({ innerRef }: any) {
     <Footer ref={innerRef}>
       <Cell>CONTACT email: lazycowbakery@gmail.com</Cell>
 
-      <Img src={"cowbaby.webp"} style={{ height: 80, width: 80 }} />
+      <Img src={"images/cowbaby.webp"} style={{ height: 80, width: 80 }} />
 
       <Cell>
         <div>ADDRESS: 3418 Fremont Ave N</div>
