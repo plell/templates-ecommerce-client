@@ -6,6 +6,7 @@ import Order from "./order";
 import Shop from "./shop";
 import Press from "./press";
 import { Wrap } from "../../core/ui";
+import Contact from "./contact";
 
 export default function Dynamic() {
   const page1 = useRef();
@@ -33,6 +34,7 @@ export default function Dynamic() {
       <Press innerRef={page2} />
       <Newsletter innerRef={page3} />
 
+      <Contact />
       <Order />
       <Shop />
     </Wrap>

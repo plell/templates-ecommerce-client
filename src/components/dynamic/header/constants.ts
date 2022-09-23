@@ -21,6 +21,10 @@ export const headers = [
       title: "Newsletter",
       to: "/newsletter",
     },
+    {
+      title: "Contact",
+      to: "/contact",
+    },
     
     // {
     //   title: "Cake Gallery",

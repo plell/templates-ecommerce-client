@@ -244,3 +244,24 @@ export const mailingListSchema = [
     validator: emailValidator,
   },
 ];
+
+export const contactFormSchema = [
+  {
+    name: "name",
+    label: "Your Name",
+    type: "text",
+    validator: strValidator,
+  },
+  {
+    name: "email",
+    label: "Your Email",
+    type: "text",
+    validator: emailValidator,
+  },
+  {
+    name: "message",
+    label: "Message",
+    type: "textarea",
+    validator: strValidator,
+  },
+];

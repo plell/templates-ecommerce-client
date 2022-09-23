@@ -13,6 +13,7 @@ import {
   Modal,
   ModalBody,
   TextField,
+  Loading,
 } from "../../../core/ui";
 import * as mui from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
@@ -32,6 +33,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { SessionResponse } from "../../../../types";
 import Form from "../../../core/form";
 import { shopSchema } from "../../../core/form/schema";
+import FadeInWrapper from "../../../core/ui/hoc/fadeInWrapper";
 
 const pk = process.env.REACT_APP_STRIPE_PUBLIC_KEY || "none";
 const stripePromise = loadStripe(pk);
@@ -72,11 +74,6 @@ export default function Shopper({ innerRef }: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const visibleState = location.pathname === "/shop";
-    setVisible(visibleState);
-  }, [location]);
-
-  useEffect(() => {
     if (visible) getItemsFromStripe();
   }, [visible]);
 
@@ -100,20 +97,14 @@ export default function Shopper({ innerRef }: any) {
     return c;
   }
 
-  async function forwardToStripe(values: any) {
+  async function forwardToStripe(form: any) {
     const products = cartWithoutNulls();
 
     try {
       setLoading(true);
       const session: SessionResponse = await getStripeProductSession({
-        products: products,
-        customer: {
-          first_name: values.first_name,
-          last_name: values.last_name,
-          phone: values.phone,
-          email: values.email,
-          pickup_date: values.pickup_date,
-        },
+        products,
+        form,
       });
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe didnt load");
@@ -226,173 +217,162 @@ export default function Shopper({ innerRef }: any) {
     </Col>
   );
 
-  return (
-    <FadeIn
-      fullScreen
-      drift={40}
-      direction='up'
-      style={{ overflow: "hidden", zIndex: 400 }}
-      isMounted={visible}
-      dismountCallback={() => {
-        navigate("/top");
-      }}
-    >
-      <>
-        <Header style={{ height: headerHeight, padding: headerPadding }}>
-          <IconButton onClick={() => setVisible(false)}>
-            <Close style={{ fontSize: 40 }} />
-          </IconButton>
+  const headerControls = (
+    <>
+      <IconButton
+        style={{ marginRight: 30, border: "1px solid #1976d2" }}
+        variant={cartIsEmpty ? "outlined" : "contained"}
+        size='large'
+        onClick={() => setShowCart(true)}
+      >
+        <StyledBadge badgeContent={cartSum} color='secondary'>
+          {cartIsEmpty ? (
+            <ShoppingCartOutlined style={{ fontSize: 30, color: "#1976d2" }} />
+          ) : (
+            <ShoppingCart style={{ fontSize: 30, color: "#1976d2" }} />
+          )}
+        </StyledBadge>
+      </IconButton>
+      <Button
+        disabled={cartSum < 1}
+        variant='contained'
+        onClick={() => setShowCheckout(true)}
+      >
+        Checkout
+      </Button>
+    </>
+  );
 
-          {/* <Title>Shop</Title> */}
+  const shoppingBody = (
+    <>
+      <Row
+        style={{
+          flexWrap: "wrap",
+          justifyContent: "space-evenly",
+          padding: "40px 0",
+          width: "100%",
+        }}
+      >
+        {items?.map((item: any, index: number) => {
+          return (
+            <ItemComponent
+              removeFromCart={removeFromCart}
+              setFocusedItem={setFocusedItem}
+              editCart={editCart}
+              cart={cart}
+              item={item}
+              index={index}
+            />
+          );
+        })}
+      </Row>
+      <div style={{ height: 100, minHeight: 100 }} />
 
-          <Row style={{ alignItems: "center" }}>
-            <IconButton
-              style={{ marginRight: 30, border: "1px solid #1976d2" }}
-              variant={cartIsEmpty ? "outlined" : "contained"}
-              size='large'
-              onClick={() => setShowCart(true)}
-            >
-              <StyledBadge badgeContent={cartSum} color='secondary'>
-                {cartIsEmpty ? (
-                  <ShoppingCartOutlined
-                    style={{ fontSize: 30, color: "#1976d2" }}
-                  />
-                ) : (
-                  <ShoppingCart style={{ fontSize: 30, color: "#1976d2" }} />
-                )}
-              </StyledBadge>
-            </IconButton>
-            <Button
-              disabled={cartSum < 1}
-              variant='contained'
-              onClick={() => setShowCheckout(true)}
-            >
-              Checkout
-            </Button>
-          </Row>
-        </Header>
+      <Modal open={showCart} onClose={() => setShowCart(false)}>
+        <ModalBody>
+          {cartList}
 
-        <Wrap
-          ref={innerRef}
-          style={{
-            height: `calc(100vh - ${headerHeight}px`,
-            overflow: "auto",
-          }}
-        >
-          <Row
-            style={{
-              flexWrap: "wrap",
-              justifyContent: "space-evenly",
-              padding: "40px 0",
-              width: "100%",
+          <Button
+            disabled={cartSum < 1}
+            style={{ width: "100%", marginTop: 30 }}
+            variant='contained'
+            onClick={() => {
+              setShowCart(false);
+              setShowCheckout(true);
             }}
           >
-            {items?.map((item: any, index: number) => {
-              return (
-                <ItemComponent
-                  removeFromCart={removeFromCart}
-                  setFocusedItem={setFocusedItem}
-                  editCart={editCart}
-                  cart={cart}
-                  item={item}
-                  index={index}
-                />
-              );
-            })}
-          </Row>
-          <div style={{ height: 100, minHeight: 100 }} />
-        </Wrap>
+            Checkout
+          </Button>
+        </ModalBody>
+      </Modal>
 
-        <Modal open={showCart} onClose={() => setShowCart(false)}>
-          <ModalBody>
-            {cartList}
+      <Modal
+        open={focusedItem ? true : false}
+        onClose={() => setFocusedItem(null)}
+      >
+        <ModalBody>
+          <ItemComponent
+            readOnly={true}
+            // removeFromCart={removeFromCart}
+            // setShowDescription={setShowDescription}
+            // editCart={editCart}
+            cart={cart}
+            item={focusedItem}
+          />
+        </ModalBody>
+      </Modal>
 
-            <Button
-              disabled={cartSum < 1}
-              style={{ width: "100%", marginTop: 30 }}
-              variant='contained'
-              onClick={() => {
-                setShowCart(false);
-                setShowCheckout(true);
-              }}
-            >
-              Checkout
-            </Button>
-          </ModalBody>
-        </Modal>
-
-        <Modal
-          open={focusedItem ? true : false}
-          onClose={() => setFocusedItem(null)}
-        >
-          <ModalBody>
-            <ItemComponent
-              readOnly={true}
-              // removeFromCart={removeFromCart}
-              // setShowDescription={setShowDescription}
-              // editCart={editCart}
-              cart={cart}
-              item={focusedItem}
-            />
-          </ModalBody>
-        </Modal>
-
-        <FadeIn
-          drift={40}
-          fullScreen
-          withOverlay
-          close={() => setShowCheckout(false)}
+      <FadeIn
+        drift={40}
+        fullScreen
+        withOverlay
+        close={() => setShowCheckout(false)}
+        style={{
+          overflow: "hidden",
+          zIndex: 100,
+          // display: "flex",
+          // justifyContent: "flex-end",
+        }}
+        isMounted={showCheckout}
+      >
+        <div
           style={{
-            overflow: "hidden",
-            zIndex: 100,
-            // display: "flex",
-            // justifyContent: "flex-end",
+            position: "absolute",
+            top: 0,
+            overflow: "auto",
+            left: "calc(100% - 500px)",
+            width: 500 - 80,
+            background: "#fff",
+            padding: 40,
+            display: "flex",
+            flexDirection: "column",
+            height: "calc(100% - 80px)",
           }}
-          isMounted={showCheckout}
         >
+          <div style={{ marginBottom: 20 }}>Shopping Cart</div>
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              overflow: "auto",
-              left: "calc(100% - 500px)",
-              width: 500 - 80,
-              background: "#fff",
-              padding: 40,
-              display: "flex",
-              flexDirection: "column",
-              height: "calc(100% - 80px)",
+              borderRadius: 6,
+              padding: 20,
+              paddingTop: 30,
+              border: "1px solid #999",
+              marginBottom: 50,
             }}
           >
-            <div style={{ marginBottom: 20 }}>Shopping Cart</div>
-            <div
-              style={{
-                borderRadius: 6,
-                padding: 20,
-                paddingTop: 30,
-                border: "1px solid #999",
-                marginBottom: 50,
-              }}
-            >
-              {cartList}
-            </div>
-
-            <Form
-              initialValues={initialValues}
-              getFormState={() => console.log("form state")}
-              schema={shopSchema}
-              disabled={cartSum < 1}
-              submitText={"Final Checkout"}
-              buttonStyle={{
-                marginTop: 20,
-                width: "100%",
-              }}
-              onSubmit={forwardToStripe}
-            />
+            {cartList}
           </div>
-        </FadeIn>
-      </>
-    </FadeIn>
+
+          <Form
+            initialValues={initialValues}
+            getFormState={() => console.log("form state")}
+            schema={shopSchema}
+            disabled={cartSum < 1}
+            submitText={"Final Checkout"}
+            buttonStyle={{
+              marginTop: 20,
+              width: "100%",
+            }}
+            onSubmit={forwardToStripe}
+          />
+        </div>
+      </FadeIn>
+    </>
+  );
+
+  return (
+    <FadeInWrapper
+      path='/shop'
+      onMount={getItemsFromStripe}
+      headerControls={headerControls}
+    >
+      {loading ? (
+        <Wrap center>
+          <Loading />
+        </Wrap>
+      ) : (
+        shoppingBody
+      )}
+    </FadeInWrapper>
   );
 }
 

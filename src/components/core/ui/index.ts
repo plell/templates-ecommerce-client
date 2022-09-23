@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import * as mui from '@mui/material'
 import { FadeInOverlay } from './animated/fadeInOverlay'
+import CircularProgress from '@mui/material/CircularProgress';
+
+export const Loading = CircularProgress
 
 export const FadeIn = FadeInOverlay
 
@@ -28,6 +31,11 @@ overflow:auto;
 export const Input:any = styled(mui.Input)`
 
 `;
+
+export const TextArea:any = styled(mui.TextareaAutosize)`
+min-height:200px;
+`;
+
 type TextFieldProps = {
       height?: number;
       padding?: number;
@@ -77,10 +85,15 @@ font-size:20px !important;
 text-transform: none !important;
 `;
 
-export const Wrap = styled.div`
+type WrapProps = {
+      center?: boolean;
+}
+
+export const Wrap = styled.div<WrapProps>`
 display:flex;
 flex-direction:column;
 align-items:center;
+${p=>p.center&&'justify-content:center;'}
 flex:1;
 width:100%;
 `;

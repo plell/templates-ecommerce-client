@@ -1,6 +1,7 @@
 import {
   Input,
   TextField,
+  TextArea,
   Select,
   MenuItem,
   FormControl,
@@ -67,6 +68,22 @@ export default function MyInput(props: any) {
         <>
           <FloatLabel err={props.error}>{label}</FloatLabel>
           <Input
+            placeholder=''
+            value={props.value || ""}
+            // label={props.label}
+            onChange={(e: any) => {
+              props.handleChange(e.target.value);
+            }}
+          />
+        </>
+      );
+    case "textarea":
+      return getMuiWrap(
+        <>
+          <FloatLabel err={props.error}>{label}</FloatLabel>
+          <Input
+            multiline
+            maxRows={4}
             placeholder=''
             value={props.value || ""}
             // label={props.label}
