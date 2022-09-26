@@ -17,14 +17,14 @@ export const headers = [
       title: "Press",
       to: "/press",
     },
-    {
-      title: "Newsletter",
-      to: "/newsletter",
-    },
-    {
-      title: "Contact",
-      to: "/contact",
-    },
+    // {
+    //   title: "Newsletter",
+    //   to: "/newsletter",
+    // },
+    // {
+    //   title: "Contact",
+    //   to: "/contact",
+    // },
     
     // {
     //   title: "Cake Gallery",

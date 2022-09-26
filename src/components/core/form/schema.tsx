@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { cakeInformation } from "../../dynamic/pages/order/constants";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -27,7 +28,36 @@ export const presetCake = [
     name: "cake_design",
     label: "Cake Design",
     type: "toggleButtons",
-    options: ["Baby Blue w/ Cherries", "Pink Ruffle", "Green Mushroom"],
+    options: [
+      cakeInformation["Baby Blue w/ Cherries"].label,
+      cakeInformation["Pink Ruffle"].label,
+      cakeInformation["Green Mushroom"].label,
+    ],
+    page: 3,
+    validator: strValidator,
+  },
+  {
+    name: "cake_flavor",
+    label: "Cake Flavor",
+    type: "toggleButtons",
+    options: ["Vanilla", "Chocolate", "Cardamom"],
+    validator: strValidator,
+    page: 3,
+  },
+  {
+    name: "cake_compote",
+    label: "Cake Compote",
+    type: "toggleButtons",
+    options: ["Raspberry", "Strawberry"],
+    price: 5,
+    page: 3,
+  },
+  {
+    name: "cake_size",
+    label: "Size",
+    type: "select",
+    options: ["6-inch", "8-inch"],
+    prices: [40, 50],
     page: 3,
     validator: strValidator,
   },
@@ -36,7 +66,7 @@ export const presetCake = [
     name: "cake_text",
     label: "Cake Text",
     type: "text",
-    price: 3,
+    // price: 3,
     page: 3,
   },
 ];
@@ -46,6 +76,15 @@ export const customCake = [
     label: "Design Your Own Cake",
     type: "header",
     page: 3,
+  },
+  {
+    name: "cake_size",
+    label: "Size",
+    type: "select",
+    options: ["6-inch", "8-inch"],
+    prices: [55, 75],
+    page: 3,
+    validator: strValidator,
   },
   {
     name: "cake_base",
@@ -59,6 +98,7 @@ export const customCake = [
   {
     name: "cake_top",
     label: "Top Trim",
+    price: 2,
     type: "toggleButtons",
     options: ["Shell", "Ruffles", "Rosettes"],
     page: 3,
@@ -66,6 +106,7 @@ export const customCake = [
   {
     name: "cake_bottom",
     label: "Bottom Trim",
+    price: 2,
     type: "toggleButtons",
     options: ["Shell", "Ruffles", "Heart Line"],
     page: 3,
@@ -73,6 +114,7 @@ export const customCake = [
   {
     name: "cake_side",
     label: "Side Trim",
+    price: 2,
     type: "toggleButtons",
     options: [
       "Double String",
@@ -91,7 +133,7 @@ export const customCake = [
   {
     name: "cake_decorations_cherries",
     label: "Cherries",
-    price: 5,
+    price: 2,
     type: "toggleButtons",
     options: ["Cherries"],
     page: 4,
@@ -99,7 +141,7 @@ export const customCake = [
   {
     name: "cake_decorations_sprinkles",
     label: "Sprinkles",
-    price: 5,
+    price: 1,
     type: "toggleButtons",
     options: ["Pearls", "Rainbow"],
     page: 4,
@@ -107,9 +149,9 @@ export const customCake = [
   {
     name: "cake_decorations_trim_accent",
     label: "Trim Accent",
-    price: 5,
+    prices: [2, 1, 2, 1],
     type: "toggleButtons",
-    options: ["Bows", "Pearls", "Rosettes"],
+    options: ["Rosettes", "Shells", "Pearls", "Bows"],
     page: 4,
   },
   {
@@ -120,7 +162,7 @@ export const customCake = [
   {
     name: "cake_text",
     label: "Cake Text",
-    price: 3,
+    // price: 3,
     type: "text",
     page: 5,
   },
@@ -144,15 +186,6 @@ export const cakeSchemaSwitcher = {
 };
 
 export const cakeSchema = [
-  {
-    name: "cake_size",
-    label: "Size",
-    type: "select",
-    options: ["6-inch", "8-inch"],
-    prices: [55, 75],
-    page: 1,
-    validator: strValidator,
-  },
   {
     name: "pickup_date",
     label: "Pickup Date",

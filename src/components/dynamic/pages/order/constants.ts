@@ -21,6 +21,27 @@ export const initialValues:any = {
     pickup_date: moment().add(DAYS_BEFORE_PICKUP,'days').format()  
   };
 
+  export const cakeInformation:any = {
+    "Green Mushroom": {
+      label: "Green Goddess",
+      id: "Green Mushroom"
+    },
+    "Pink Ruffle": {
+      label: "The Romantic",
+      id: "Pink Ruffle"
+    },
+    "Baby Blue w/ Cherries": {
+      label: "The Classic",
+      id: "Baby Blue w/ Cherries"
+    }
+  };
+
+const cakeDesigns = Object.keys(cakeInformation).map((c) => {
+  const cake = cakeInformation[c]
+  return {
+      ...cake
+    }
+  })
 
 export const cakeImages: any = {
     'cake_design_Baby Blue w/ Cherries': 'example cakes/baby blue with cherries.PNG',
@@ -70,14 +91,25 @@ const heartOptions: any = {
    
    schema.forEach((s: any) => {
      const keyname:string = s.name
-     const value: any = formState[keyname]
+     let value: any = formState[keyname]
      
      if (typeof value === 'string') {
+       
+       const isCakeDesign = cakeDesigns.find(f => f.label === value)
+       if (isCakeDesign) {
+         value = isCakeDesign.id
+       }
+       
        let imgKey = keyname + '_' + value
        //only one key for cake text
        if (keyname === 'cake_text' && value) {
          imgKey = 'cake_text'
        }
+
+       
+
+       
+
        let imgUrl: string = cakeImages[`${imgKey}`]
        
        if (imgUrl) {
