@@ -31,7 +31,6 @@ export default function Content() {
       <Header scrollTop={scrollTop} />
       <Top />
       <Pages />
-
       <Bottom innerRef={bottomRef} />
     </Wrap>
   );

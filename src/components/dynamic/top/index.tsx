@@ -58,14 +58,14 @@ const TopWrap = styled.div`
   width: calc(100% - 20px);
   color: #639aff;
   font-weight: 700;
-  padding: 0px 10px;
+  padding: 50px 10px 0;
 
-  background: #639aff;
+  // background: #639aff;
 
-  background-image: url("${(p) => "images/cafe.jpeg"}");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  // background-image: url("${(p) => "images/cafe.jpeg"}");
+  // background-position: center;
+  // background-size: cover;
+  // background-repeat: no-repeat;
 `;
 
 const Title = styled.div`

@@ -28,14 +28,6 @@ export default function OrderWrapper() {
     schema = [...cakeSchema, ...cakeSchemaSwitcher[formState.cake_type]];
   }
 
-  // if (
-  //   formState?.cake_type === cakeTypes.preset.label &&
-  //   formState?.cake_design === cakeInformation["Green Mushroom"].label
-  // ) {
-  //   const textIndex = schema.findIndex((f: any) => f.name === "cake_text");
-  //   schema.splice(textIndex, 1);
-  // }
-
   if (
     formState?.cake_type === cakeTypes.preset.label &&
     (formState?.cake_design === cakeInformation["Green Mushroom"].label ||
