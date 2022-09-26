@@ -130,6 +130,8 @@ export default function MyInput(props: any) {
                 selected = toggleState.includes(o);
               }
 
+              const thisPrice = props.prices ? props.prices[i] : null;
+
               return (
                 //   @ts-ignore
                 <ToggleButton
@@ -156,6 +158,7 @@ export default function MyInput(props: any) {
                   }}
                 >
                   {o}
+                  {thisPrice && ` (+$${thisPrice})`}
                 </ToggleButton>
               );
             })}

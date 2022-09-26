@@ -32,7 +32,6 @@ export default function Content() {
       <Top />
       <Pages />
 
-      <div style={{ minHeight: 200 }} />
       <Bottom innerRef={bottomRef} />
     </Wrap>
   );
