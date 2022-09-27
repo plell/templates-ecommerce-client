@@ -1,7 +1,7 @@
 
 
 // customer variables
-const SERVER_URL = "https://davidplell.com/"
+const SERVER_URL = "https://api.davidplell.com/"
 export const DAYS_BEFORE_PICKUP = 2
 // core variables
 const origin = window.location.origin;

@@ -43,7 +43,7 @@ export const hours: any = {
 // @ts-ignore
 export const team: any = [
   {
-    img: "sean.jpg",
+    img: "lara polaroid.jpg",
     text1: `
         In the summer of 2020, Lara de la Rosa (she/her) started Lazy Cow out
         of her basement. Lara has had a love for food and baking since early
@@ -60,7 +60,7 @@ export const team: any = [
     img: "katie.jpg",
     text1: `
       Where do I even begin... We have the great privilege of having Katie
-      Ferguson (she/her) as our baker. Her cakes are immaculate. She runs on
+      Ferguson (she/they) as our baker. Her cakes are immaculate. She runs on
       cake scraps and Shirley Temples -- I'm pretty sure she will only
       consume something if it's pastel colored. We're trying to incorporate
       more vegetables into her diet.`,
@@ -71,31 +71,31 @@ export const team: any = [
     down in max 4 words. Terrifying. She's got strong min pin energy.
         `,
   },
-  {
-    img: "katie.jpg",
-    text1: `
-      Phoebe Katz (she/her) is one of our bakers. Phoebe effortlessly cranks
-          out delectable desserts, she's whip smart and one of the funniest and
-          hardest working people I know. She produces a vaguely unhuman laugh
-          out of me that no one else does, which is both awesome and scary. She
-          has both a coldness and warmth about her that she flips between
-          effortlessly, a fact which I find endlessly fascinating. Get you a
-          girl who can do both! It's a privilege to know her. A true comrade!`,
-  },
-  {
-    img: "susan.jpg",
-    text1: `
-     You may have seen Raiza de Vera (she/her) up front working the bar,
-     but there's really nothing she can't do. She is not only a barista,
-     but a trained cook, yoga instructor and dedicated activist and
-     community organizer. Her passion for mutual aid is radiant, she imbues
-     intention into all aspects of her life.`,
-    text2: `
-    Raiza is a wonderfully bubbly, joyful individual. Her joy has this
-    oceanic depth to it -- it's the kind of joy that one has to fight for
-    every day, and she makes carrying that weight look effortless.
-        `,
-  },
+  // {
+  //   img: "katie.jpg",
+  //   text1: `
+  //     Phoebe Katz (she/her) is one of our bakers. Phoebe effortlessly cranks
+  //         out delectable desserts, she's whip smart and one of the funniest and
+  //         hardest working people I know. She produces a vaguely unhuman laugh
+  //         out of me that no one else does, which is both awesome and scary. She
+  //         has both a coldness and warmth about her that she flips between
+  //         effortlessly, a fact which I find endlessly fascinating. Get you a
+  //         girl who can do both! It's a privilege to know her. A true comrade!`,
+  // },
+  // {
+  //   img: "susan.jpg",
+  //   text1: `
+  //    You may have seen Raiza de Vera (she/her) up front working the bar,
+  //    but there's really nothing she can't do. She is not only a barista,
+  //    but a trained cook, yoga instructor and dedicated activist and
+  //    community organizer. Her passion for mutual aid is radiant, she imbues
+  //    intention into all aspects of her life.`,
+  //   text2: `
+  //   Raiza is a wonderfully bubbly, joyful individual. Her joy has this
+  //   oceanic depth to it -- it's the kind of joy that one has to fight for
+  //   every day, and she makes carrying that weight look effortless.
+  //       `,
+  // },
   {
     img: "milo.jpg",
     text1: `
@@ -107,5 +107,29 @@ export const team: any = [
           firsthand that Milo can put in a 14 hr day and then go out afterwards.
           Enjoy your youth while you can, son! We intend to protect our little
           Icarus at all costs. You've been warned!`,
+  },
+  {
+    img: "sean.jpg",
+    text1: `
+    Sean Moran (he/him) is equal parts warm and charming. You will probably see him looking comfy and practicing his latte art; or loafing around the piano, as he is a very talented musician. His band, Balcony Bridge, is electric — a rare performance hailed by each of the musicians, which calls out of you the same unselfconscious exuberance they display on stage. Sean is a Renaissance man of feeling, passionate and dedicated.
+    `,
+  },
+  {
+    img: "heryk polaroid.jpg",
+    text1: `
+    There is a calm energy and work ethic Heryk (he/him) brings to the bakery, stemming from a deep self-assurance of his competency and values. His quiet confidence provides a buoyant resilience he displays when things don’t go according to plan. This same resilience propelled him through law school, and now he works freelance. Heryk takes on cases on top of his bakery work to provide deeply needed assistance to undocumented communities, while they attempt to traverse an unnecessarily complicated legal landscape. His fluency in Spanish allows him to help his own Latinx community, as well as talk shit with my mom. He is also genuinely kind, funny and has a true passion for baking.
+    `,
+  },
+  {
+    img: "oviya polaroid.jpg",
+    text1: `
+    Oviya Krishnan (she/her) is now our youngest member, which we love to point out to Katie. She is trailblazing her own major at UW at only 17 and is passionate about everything; she’s bubbly, quick and excited. She’s an exceptional and rounded artist, whether she is dancing on her dance team, doodling on our chalk board, or putting together a sensational outfit. Oviya’s discerning intellect has made her a quick learner, having no barista experience before this job and is now excelling within the first month. 
+    `,
+  },
+  {
+    img: "susan.jpg",
+    text1: `
+    With the sun rises Susan Huynh (she/her), our opener, and like the sun she is radiant and reliable. When she first started she was quiet, but with trust and time has only blossomed. On the daily Susan flexes her adept creativity in the kitchen, her recipes almost always work the first time, which I can’t say for myself. She has the true instinct of a baker, exceptional style and music taste. She is sweet beyond compare, her energy placates and sets the day off right. 
+    `,
   },
 ];
