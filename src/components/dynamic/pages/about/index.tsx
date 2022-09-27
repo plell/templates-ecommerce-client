@@ -7,7 +7,7 @@ export default function About({ innerRef }: any) {
     <PageWrap ref={innerRef}>
       <Title>Our Mission</Title>
       <Row>
-        <Col style={{ padding: 30 }}>
+        <Col style={{ padding: 30, maxWidth: 500 }}>
           <Txt>{text1}</Txt>
           <Txt>{text2}</Txt>
           <Txt>{text3}</Txt>
@@ -32,9 +32,23 @@ export default function About({ innerRef }: any) {
       <Title>Our Team</Title>
 
       {team.map((m: any, i: number) => {
+        let offset = i % 2;
+
+        if (offset < 1) offset = -1;
+
         return (
-          <Row key={i}>
-            <Col style={{ padding: 30, width: 400 }}>
+          <Row
+            key={i}
+            style={{ justifyContent: "space-around", width: "100%" }}
+          >
+            <Col
+              style={{
+                padding: 30,
+                width: 400,
+                justifyContent: "center",
+                zIndex: 1,
+              }}
+            >
               <Txt>{m.text1}</Txt>
               {m.text2 && <Txt>{m.text2}</Txt>}
             </Col>
@@ -42,7 +56,11 @@ export default function About({ innerRef }: any) {
             <Col>
               <Img
                 src={"images/" + m.img}
-                style={{ height: 466, width: 391 }}
+                style={{
+                  height: 466,
+                  width: 391,
+                  transform: `rotate(${offset * 5}deg)`,
+                }}
               />
             </Col>
           </Row>
@@ -68,7 +86,9 @@ export const Title = styled.div`
 `;
 
 export const Txt = styled.div`
+  font-size: 17px;
   margin-bottom: 10px;
+  line-height: 24px;
 `;
 
 export const Col = styled.div`

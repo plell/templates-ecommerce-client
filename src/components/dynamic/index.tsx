@@ -31,8 +31,6 @@ export default function Content() {
       <Header scrollTop={scrollTop} />
       <Top />
       <Pages />
-
-      <div style={{ minHeight: 200 }} />
       <Bottom innerRef={bottomRef} />
     </Wrap>
   );

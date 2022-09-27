@@ -15,7 +15,7 @@ export default function FadeInWrapper({
 }: any) {
   const [visible, setVisible] = useState(false);
   const location = useLocation();
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const visibleState = location.pathname === path;
@@ -34,14 +34,11 @@ export default function FadeInWrapper({
       direction='up'
       style={{ overflow: "hidden", zIndex: 400 }}
       isMounted={visible}
-      //   dismountCallback={() => {
-      //     navigate("/top");
-      //   }}
     >
       <>
         <Header style={{ height: headerHeight, padding: headerPadding }}>
           <div style={{ minWidth: 80 }}>
-            <IconButton onClick={() => setVisible(false)}>
+            <IconButton onClick={() => navigate("")}>
               <Close style={{ fontSize: 40 }} />
             </IconButton>
           </div>

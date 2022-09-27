@@ -253,18 +253,22 @@ export default function Shopper({ innerRef }: any) {
           width: "100%",
         }}
       >
-        {items?.map((item: any, index: number) => {
-          return (
-            <ItemComponent
-              removeFromCart={removeFromCart}
-              setFocusedItem={setFocusedItem}
-              editCart={editCart}
-              cart={cart}
-              item={item}
-              index={index}
-            />
-          );
-        })}
+        {items?.length ? (
+          items.map((item: any, index: number) => {
+            return (
+              <ItemComponent
+                removeFromCart={removeFromCart}
+                setFocusedItem={setFocusedItem}
+                editCart={editCart}
+                cart={cart}
+                item={item}
+                index={index}
+              />
+            );
+          })
+        ) : (
+          <div>No items available. Check back later!</div>
+        )}
       </Row>
       <div style={{ height: 100, minHeight: 100 }} />
 

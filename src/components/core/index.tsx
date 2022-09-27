@@ -13,8 +13,8 @@ export default function Core() {
 
 function PaymentModal(props: { success?: boolean }) {
   const [show, setShow] = useState(true);
-  let body = <div>failure</div>;
-  if (props.success) body = <div>SUCCESS</div>;
+  let body = <div>Payment was cancelled.</div>;
+  if (props.success) body = <div>Thanks for your purchase!</div>;
 
   return (
     <Modal open={show} onClose={() => setShow(false)}>

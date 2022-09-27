@@ -5,13 +5,18 @@ import {
   cakeSchemaSwitcher,
   cakeTypes,
 } from "../../../core/form/schema";
-import { initialValues, doCakeImages, cakeImages } from "./constants";
+import {
+  initialValues,
+  doCakeImages,
+  cakeImages,
+  cakeInformation,
+} from "./constants";
 import Order from "../../../core/order";
 import { Img, Row } from "../../../core/ui";
 import { getPriceFromForm } from "../../../core/helpers";
 import FadeInWrapper from "../../../core/ui/hoc/fadeInWrapper";
 
-export default function OrderWrapper({ innerRef }: any) {
+export default function OrderWrapper() {
   const [formState, setFormState]: any = useState({});
 
   function getFormState(values: any) {
@@ -25,10 +30,14 @@ export default function OrderWrapper({ innerRef }: any) {
 
   if (
     formState?.cake_type === cakeTypes.preset.label &&
-    formState?.cake_design === "Green Mushroom"
+    (formState?.cake_design === cakeInformation["Green Mushroom"].label ||
+      formState?.cake_design === cakeInformation["Pink Ruffle"].label)
   ) {
-    const textIndex = schema.findIndex((f: any) => f.name === "cake_text");
-    schema.splice(textIndex, 1);
+    const cakeSizeIndex = schema.findIndex((f: any) => f.name === "cake_size");
+    if (cakeSizeIndex > -1) schema[cakeSizeIndex].prices = [60, 70];
+  } else {
+    const cakeSizeIndex = schema.findIndex((f: any) => f.name === "cake_size");
+    if (cakeSizeIndex > -1) schema[cakeSizeIndex].prices = [40, 50];
   }
 
   if (formState?.cake_type === cakeTypes.preset.label) {
