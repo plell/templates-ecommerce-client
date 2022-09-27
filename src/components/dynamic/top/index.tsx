@@ -1,19 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Wrap } from "../../core/ui";
 
 export default function Top() {
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef: any = useRef();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (videoLoaded && videoRef.current) {
+      videoRef.current.play();
+    }
+  }, [videoLoaded]);
+
   return (
     <TopWrap>
       <video
-        onLoadedData={() => {
-          console.log("loaded video!");
-          setVideoLoaded(true);
-        }}
-        autoPlay
+        ref={videoRef}
+        onLoadedData={() => setVideoLoaded(true)}
         loop
         style={{
           transition: "opacity 3s",
