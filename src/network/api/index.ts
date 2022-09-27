@@ -17,10 +17,11 @@ function addMethod(m: string): Function {
   const func = async function (url: string, data: any, incomingHeaders: any) {
     try {
       const headers: { [key: string]: string } = {};
-      const opts: { [key: string]: any } = { mode: "cors" };
+      const opts: { [key: string]: any } = { mode: "no-cors" };
+      headers["Access-Control-Allow-Origin"] = window.location.hostname
       if (m === "POST" || m === "PUT") {
-          headers["Content-Type"] = "application/json"
-          opts.body = JSON.stringify(data);
+        headers["Content-Type"] = "application/json"
+        opts.body = JSON.stringify(data);
       }
       opts.headers = new Headers(headers);
       opts.method = m;

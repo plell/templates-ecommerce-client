@@ -10,9 +10,11 @@ export default function Top() {
 
   useEffect(() => {
     if (videoLoaded && videoRef.current) {
-      videoRef.current.play();
+      setTimeout(() => {
+        videoRef.current?.play();
+      }, 400);
     }
-  }, [videoLoaded]);
+  }, [videoLoaded, videoRef?.current]);
 
   return (
     <TopWrap>
@@ -20,8 +22,9 @@ export default function Top() {
         ref={videoRef}
         onLoadedData={() => setVideoLoaded(true)}
         loop
+        autoPlay
         style={{
-          transition: "opacity 3s",
+          transition: "opacity 1s",
           height: 600,
           minHeight: 600,
           opacity: videoLoaded ? 1 : 0,
