@@ -1,17 +1,25 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Button, Img, Wrap } from "../../core/ui";
+import { Button, Wrap } from "../../core/ui";
 
 export default function Top() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const navigate = useNavigate();
   return (
     <TopWrap>
       <video
+        onLoadedData={() => {
+          console.log("loaded video!");
+          setVideoLoaded(true);
+        }}
         autoPlay
         loop
         style={{
-          // width: "100vw",
-          maxHeight: 600,
+          transition: "opacity 3s",
+          height: 600,
+          minHeight: 600,
+          opacity: videoLoaded ? 1 : 0,
         }}
       >
         <source src='images/cake_movie.mp4' type='video/mp4'></source>
