@@ -12,11 +12,13 @@ type stripeProductSessionInput = {
 
 export async function getStripeAmountSession(data: stripeAmountSessionInput) {
     const res = await api.post("stripe/createAmountSessionByCustomer", data);
+    console.log('res',res)
     return res
 }
 
 export async function getStripeProductSession(data: stripeProductSessionInput) {
     const res = await api.post("stripe/createProductSessionByCustomer", data);
+    console.log('res',res)
     return res
 }
 
