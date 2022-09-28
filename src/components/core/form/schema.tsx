@@ -108,7 +108,7 @@ export const customCake = [
     label: "Bottom Trim",
     price: 2,
     type: "toggleButtons",
-    options: ["Shell", "Ruffles", "Heart Line"],
+    options: ["Shell", "Ruffles"],
     page: 3,
   },
   {
