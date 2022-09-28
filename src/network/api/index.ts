@@ -14,11 +14,13 @@ class API {
 }
 
 function addMethod(m: string): Function {
-  const func = async function (url: string, data: any, incomingHeaders: any) {
+  const func = async function (url: string, data: any) {
     try {
       const headers: { [key: string]: string } = {};
-      const opts: { [key: string]: any } = { mode: "no-cors" };
-      headers["Access-Control-Allow-Origin"] = window.location.hostname
+      const opts: { [key: string]: any } = {
+        mode: "cors"
+      };
+      // headers["Access-Control-Allow-Origin"] = window.location.hostname
       if (m === "POST" || m === "PUT") {
         headers["Content-Type"] = "application/json"
         opts.body = JSON.stringify(data);
@@ -26,6 +28,7 @@ function addMethod(m: string): Function {
       opts.headers = new Headers(headers);
       opts.method = m;
       const r = await fetch(API_URL + url, opts);
+      console.log('r',r)
       let res = await r.json();
       console.log('response', res)
       return res;

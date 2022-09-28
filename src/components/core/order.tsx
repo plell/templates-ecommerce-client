@@ -25,6 +25,7 @@ export default function Order({
     const f: any = {};
     schema?.forEach((s: any) => {
       const key = s.name;
+      if (!key || !formValues[key]) return;
       f[key] = formValues[key];
     });
     return f;
@@ -33,7 +34,7 @@ export default function Order({
   async function forwardToStripe(formValues: any) {
     // remove values not included in current schema (schemas sometimes change)
     const form = cleanForm(formValues);
-
+    console.log("form", form);
     try {
       setLoading(true);
       const amount = getPriceFromFormForStripe(schema, form);
@@ -41,8 +42,10 @@ export default function Order({
         amount,
         form,
       });
+      console.log("session", session);
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe didnt load");
+      console.log("redirectToCheckout");
       await stripe.redirectToCheckout({
         sessionId: session.sessionId,
       });
