@@ -28,6 +28,16 @@ export default function OrderWrapper() {
     schema = [...cakeSchema, ...cakeSchemaSwitcher[formState.cake_type]];
   }
 
+  // remove cake text from green mushroom
+  if (
+    formState?.cake_type === cakeTypes.preset.label &&
+    formState?.cake_design === cakeInformation["Green Mushroom"].label
+  ) {
+    const cakeTextIndex = schema.findIndex((f: any) => f.name === "cake_text");
+    if (cakeTextIndex > -1) schema.splice(cakeTextIndex, 1);
+  }
+
+  // adjust cake base prices
   if (
     formState?.cake_type === cakeTypes.preset.label &&
     (formState?.cake_design === cakeInformation["Green Mushroom"].label ||

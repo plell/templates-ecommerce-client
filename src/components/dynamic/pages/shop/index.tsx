@@ -69,6 +69,7 @@ export default function Shopper({ innerRef }: any) {
   const [cart, setCart]: any = useState({});
   const [showCart, setShowCart]: any = useState(false);
   const [showCheckout, setShowCheckout]: any = useState(false);
+  const [checkoutLoading, setCheckoutLoading]: any = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ export default function Shopper({ innerRef }: any) {
     const products = cartWithoutNulls();
 
     try {
-      setLoading(true);
+      setCheckoutLoading(true);
       const session: SessionResponse = await getStripeProductSession({
         products,
         form,
@@ -113,7 +114,7 @@ export default function Shopper({ innerRef }: any) {
       });
     } catch (e) {
       console.log(e);
-      setLoading(false);
+      setCheckoutLoading(false);
     }
   }
 
@@ -351,6 +352,7 @@ export default function Shopper({ innerRef }: any) {
             getFormState={() => console.log("form state")}
             schema={shopSchema}
             disabled={cartSum < 1}
+            loading={checkoutLoading}
             submitText={"Final Checkout"}
             buttonStyle={{
               marginTop: 20,
