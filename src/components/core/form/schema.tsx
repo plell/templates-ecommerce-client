@@ -19,11 +19,11 @@ const repoStrValidator = Yup.string()
   .required("Required");
 
 export const presetCake = [
-  {
-    label: "Choose a Preset Cake",
-    type: "header",
-    page: 3,
-  },
+  // {
+  //   label: "Choose a Preset Cake",
+  //   type: "header",
+  //   page: 3,
+  // },
   {
     name: "cake_design",
     label: "Cake Design",
@@ -73,7 +73,7 @@ export const presetCake = [
 
 export const customCake = [
   {
-    label: "Design Your Own Cake",
+    label: "Size and Shape",
     type: "header",
     page: 3,
   },
@@ -96,12 +96,9 @@ export const customCake = [
     validator: strValidator,
   },
   {
-    name: "cake_flavor",
-    label: "Cake Flavor",
-    type: "toggleButtons",
-    options: ["Vanilla", "Chocolate", "Cardamom"],
-    validator: strValidator,
-    page: 3,
+    label: "Trim",
+    type: "header",
+    page: 4,
   },
   {
     name: "cake_top",
@@ -109,7 +106,7 @@ export const customCake = [
     price: 2,
     type: "toggleButtons",
     options: ["Shell", "Ruffles", "Rosettes"],
-    page: 3,
+    page: 4,
   },
   {
     name: "cake_bottom",
@@ -117,7 +114,7 @@ export const customCake = [
     price: 2,
     type: "toggleButtons",
     options: ["Shell", "Ruffles"],
-    page: 3,
+    page: 4,
   },
   {
     name: "cake_side",
@@ -131,12 +128,33 @@ export const customCake = [
       "Ribbon",
       "Ruffles",
     ],
-    page: 3,
+    page: 4,
+  },
+  {
+    label: "Flavors",
+    type: "header",
+    page: 5,
+  },
+  {
+    name: "cake_flavor",
+    label: "Cake Flavor",
+    type: "toggleButtons",
+    options: ["Vanilla", "Chocolate", "Cardamom"],
+    validator: strValidator,
+    page: 5,
+  },
+  {
+    name: "cake_compote",
+    label: "Cake Compote",
+    type: "toggleButtons",
+    options: ["Raspberry", "Strawberry"],
+    price: 5,
+    page: 5,
   },
   {
     label: "Decorations",
-    type: "subheader",
-    page: 4,
+    type: "header",
+    page: 6,
   },
   {
     name: "cake_decorations_cherries",
@@ -144,7 +162,7 @@ export const customCake = [
     price: 2,
     type: "toggleButtons",
     options: ["Cherries"],
-    page: 4,
+    page: 6,
   },
   {
     name: "cake_decorations_sprinkles",
@@ -152,7 +170,7 @@ export const customCake = [
     price: 1,
     type: "toggleButtons",
     options: ["Pearls", "Rainbow"],
-    page: 4,
+    page: 6,
   },
   {
     name: "cake_decorations_trim_accent",
@@ -160,19 +178,19 @@ export const customCake = [
     prices: [2, 1, 2, 1],
     type: "toggleButtons",
     options: ["Rosettes", "Shells", "Pearls", "Bows"],
-    page: 4,
+    page: 6,
   },
   {
     label: "Final Touch",
-    type: "subheader",
-    page: 5,
+    type: "header",
+    page: 7,
   },
   {
     name: "cake_text",
     label: "Cake Text",
     // price: 3,
     type: "text",
-    page: 5,
+    page: 7,
   },
 ];
 
