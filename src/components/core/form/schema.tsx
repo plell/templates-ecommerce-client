@@ -96,6 +96,14 @@ export const customCake = [
     validator: strValidator,
   },
   {
+    name: "cake_flavor",
+    label: "Cake Flavor",
+    type: "toggleButtons",
+    options: ["Vanilla", "Chocolate", "Cardamom"],
+    validator: strValidator,
+    page: 3,
+  },
+  {
     name: "cake_top",
     label: "Top Trim",
     price: 2,

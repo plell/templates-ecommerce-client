@@ -13,12 +13,25 @@ import { DAYS_BEFORE_PICKUP } from '../../../../constants'
       img: "cake/example cakes/pastel pink with ruffles.png",
     },
   ];
+
+const defaultPickupDay = () => {
+  let dd = moment().add(DAYS_BEFORE_PICKUP, 'days')
+  const dayOfWeek = dd.day();
+
+  if (dayOfWeek === 1) {
+    dd.add(2, 'days')
+  } else if (dayOfWeek === 2) {
+    dd.add(1, 'days')
+  }
+   
+  return dd.format()  
+}
   
 export const initialValues:any = {
     cake_size: "6-inch",
     cake_type: "Choose a Preset Cake",
     cake_design: 'Baby Blue w/ Cherries',
-    pickup_date: moment().add(DAYS_BEFORE_PICKUP,'days').format()  
+    pickup_date: defaultPickupDay()
   };
 
   export const cakeInformation:any = {
