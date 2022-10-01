@@ -216,7 +216,17 @@ const renderWeekPickerDay = (
 ) => {
   const earliestDate =
     moment().add(DAYS_BEFORE_PICKUP, "days").startOf("day").unix() - 1;
-  const thisDate = moment(date).startOf("day").unix();
-  const disabled = earliestDate < thisDate ? false : true;
+
+  const thisDate = moment(date).startOf("day");
+
+  let disabled = false;
+  const dow = thisDate.day();
+
+  if (thisDate.unix() < earliestDate) {
+    disabled = true;
+  } else if (dow === 1 || dow === 2) {
+    disabled = true;
+  }
+
   return <PickersDay {...pickersDayProps} disabled={disabled} />;
 };
