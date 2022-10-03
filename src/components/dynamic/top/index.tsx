@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useIsMobile } from "../../../hooks";
 import { Button, Wrap } from "../../core/ui";
 
 export default function Top() {
@@ -8,8 +9,11 @@ export default function Top() {
   const videoRef: any = useRef();
   const navigate = useNavigate();
 
+  const isMobile = useIsMobile();
+
   return (
     <TopWrap>
+      {!isMobile && <div style={{ height: 70 }} />}
       <video
         ref={videoRef}
         onLoadedData={() => setVideoLoaded(true)}
@@ -19,7 +23,7 @@ export default function Top() {
         style={{
           transition: "opacity 1s",
           height: 600,
-          minHeight: 600,
+          minHeight: 500,
           opacity: videoLoaded ? 1 : 0,
         }}
       >
@@ -55,17 +59,10 @@ const TopWrap = styled.div`
   justify-content: center;
   position: relative;
   align-items: center;
-  width: calc(100% - 20px);
+  width: 100%;
   color: #639aff;
   font-weight: 700;
-  padding: 50px 10px 0;
-
-  // background: #639aff;
-
-  // background-image: url("${(p) => "images/cafe.jpeg"}");
-  // background-position: center;
-  // background-size: cover;
-  // background-repeat: no-repeat;
+  // overflow: hidden;
 `;
 
 const Title = styled.div`

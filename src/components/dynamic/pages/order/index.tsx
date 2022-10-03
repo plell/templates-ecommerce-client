@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   cakeSchema,
@@ -19,6 +19,7 @@ import { useIsMobile } from "../../../../hooks";
 
 export default function OrderWrapper() {
   const [formState, setFormState]: any = useState({});
+  const [imgs, setImgs]: any = useState([]);
 
   const isMobile = useIsMobile();
 
@@ -30,6 +31,12 @@ export default function OrderWrapper() {
   if (formState?.cake_type) {
     schema = [...cakeSchema, ...cakeSchemaSwitcher[formState.cake_type]];
   }
+
+  useEffect(() => {
+    const images: string[] = doCakeImages(schema, formState);
+    if (!images.length) images.push(cakeImages["cake_base_Round"]);
+    setImgs(images);
+  }, [formState]);
 
   // remove cake text from green mushroom
   if (
@@ -57,10 +64,6 @@ export default function OrderWrapper() {
     initialValues["cake_base"] = "Round";
   }
 
-  const imgs: string[] = doCakeImages(schema, formState);
-
-  if (!imgs.length) imgs.push(cakeImages["cake_base_Round"]);
-
   const headerControls = (
     <Total>
       SUBTOTAL:{" "}
@@ -83,7 +86,7 @@ export default function OrderWrapper() {
           }}
         >
           <Cake>
-            {imgs.map((c, i) => {
+            {imgs.map((c: any, i: number) => {
               return (
                 <Img
                   key={"img" + i}

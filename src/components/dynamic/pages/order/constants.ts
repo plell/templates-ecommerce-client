@@ -26,13 +26,6 @@ export const defaultPickupDay = () => {
    
   return dd.format()  
 }
-  
-export const initialValues:any = {
-    cake_size: "6-inch",
-    cake_type: "Choose a Preset Cake",
-    cake_design: 'Baby Blue w/ Cherries',
-    pickup_date: defaultPickupDay()
-  };
 
   export const cakeInformation:any = {
     "Green Mushroom": {
@@ -47,6 +40,13 @@ export const initialValues:any = {
       label: "The Classic",
       id: "Baby Blue w/ Cherries"
     }
+  };
+
+  export const initialValues:any = {
+    cake_size: "6-inch",
+    cake_type: "Choose a Preset Cake",
+    cake_design: cakeInformation["Baby Blue w/ Cherries"].label,
+    pickup_date: defaultPickupDay()
   };
 
 const cakeDesigns = Object.keys(cakeInformation).map((c) => {
@@ -89,8 +89,10 @@ const heartOptions: any = {
   'cake_base':["Heart"]
 }
 
- export const doCakeImages = (schema:any, formState:any) => {
-   const imgs: string[] = [] 
+export const doCakeImages = (schemaOriginal: any, formStateOriginal: any): string[] => {
+  const imgs: string[] = []
+  const formState = {...formStateOriginal}
+   const schema = [...schemaOriginal]
 
    let isHeart:boolean = false
 
@@ -119,10 +121,7 @@ const heartOptions: any = {
          imgKey = 'cake_text'
        }
 
-       
-
-       
-
+      
        let imgUrl: string = cakeImages[`${imgKey}`]
        
        if (imgUrl) {
