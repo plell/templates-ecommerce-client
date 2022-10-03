@@ -33,6 +33,7 @@ export const presetCake = [
       cakeInformation["Pink Ruffle"].label,
       cakeInformation["Green Mushroom"].label,
     ],
+    neverNull: true,
     page: 3,
     validator: strValidator,
   },

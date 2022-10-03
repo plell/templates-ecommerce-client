@@ -26,6 +26,7 @@ export default function Content() {
         height: "100%",
         background: "#ffffff",
         overflow: path === "/order" ? "hidden" : "auto",
+        overflowX: "hidden",
       }}
     >
       <Header scrollTop={scrollTop} />

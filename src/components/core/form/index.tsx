@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { Button, FadeIn, IconButton } from "../ui";
 import Input from "./inputs";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { sleep } from "../helpers";
 
 type FormProps = {
   getFormState: (values: any) => void;
@@ -27,7 +26,6 @@ export default function Form(props: FormProps) {
   const { schema, getFormState } = props;
   const [page, setPage] = useState(1);
   const [turningToPage, setTurningToPage]: any = useState(0);
-  const [loading, setLoading] = useState(false);
   const formRef: any = useRef(null);
   const refBody = useRef(null);
   const scrollDiv = props.scrollDiv ? props.scrollDiv : refBody;
@@ -68,8 +66,6 @@ export default function Form(props: FormProps) {
   }
 
   function validateErrors(errors: any) {
-    console.log("errors", errors);
-
     let clean = true;
     if (props.paged) {
       const fieldsOnThisPage = props.schema.filter((f: any) => f.page === page);
@@ -84,7 +80,7 @@ export default function Form(props: FormProps) {
   }
 
   // if no schema, return empty div
-  if (loading || !schema) return <Wrap />;
+  if (!schema) return <Wrap />;
 
   return (
     <div ref={props.formRef}>
