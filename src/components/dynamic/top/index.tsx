@@ -8,14 +8,6 @@ export default function Top() {
   const videoRef: any = useRef();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (videoLoaded && videoRef.current) {
-      setTimeout(() => {
-        videoRef.current?.play();
-      }, 400);
-    }
-  }, [videoLoaded, videoRef?.current]);
-
   return (
     <TopWrap>
       <video
@@ -23,6 +15,7 @@ export default function Top() {
         onLoadedData={() => setVideoLoaded(true)}
         loop
         autoPlay
+        muted
         style={{
           transition: "opacity 1s",
           height: 600,
