@@ -34,9 +34,10 @@ export default function Dynamic() {
       <Press innerRef={page2} />
       {/* <Newsletter innerRef={page3} /> */}
 
-      {/* <Contact /> */}
       <Order />
       <Shop />
+
+      {/* <Contact /> */}
     </Wrap>
   );
 }

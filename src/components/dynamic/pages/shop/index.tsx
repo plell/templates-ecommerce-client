@@ -19,8 +19,8 @@ import * as mui from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import {
   Add,
+  ArrowBack,
   Close,
-  Delete,
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
@@ -28,12 +28,13 @@ import {
   getProductsFromStripe,
   getStripeProductSession,
 } from "../../../../network/actions";
-import { fakeItems, initialValues } from "./constants";
+import { initialValues } from "./constants";
 import { loadStripe } from "@stripe/stripe-js";
 import { SessionResponse } from "../../../../types";
 import Form from "../../../core/form";
 import { shopSchema } from "../../../core/form/schema";
 import FadeInWrapper from "../../../core/ui/hoc/fadeInWrapper";
+import { useIsMobile } from "../../../../hooks";
 
 const pk = process.env.REACT_APP_STRIPE_PUBLIC_KEY || "none";
 const stripePromise = loadStripe(pk);
@@ -71,8 +72,7 @@ export default function Shopper({ innerRef }: any) {
   const [showCheckout, setShowCheckout]: any = useState(false);
   const [checkoutLoading, setCheckoutLoading]: any = useState(false);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (visible) getItemsFromStripe();
@@ -325,8 +325,8 @@ export default function Shopper({ innerRef }: any) {
             position: "absolute",
             top: 0,
             overflow: "auto",
-            left: "calc(100% - 500px)",
-            width: 500 - 80,
+            left: isMobile ? 0 : "calc(100% - 500px)",
+            width: isMobile ? "calc(100% - 80px)" : 500 - 80,
             background: "#fff",
             padding: 40,
             display: "flex",
@@ -334,6 +334,24 @@ export default function Shopper({ innerRef }: any) {
             height: "calc(100% - 80px)",
           }}
         >
+          {isMobile && (
+            <div
+              style={{
+                marginBottom: 20,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button
+                startIcon={<ArrowBack />}
+                onClick={() => setShowCheckout(false)}
+                size='large'
+              >
+                Back
+              </Button>
+            </div>
+          )}
+
           <div style={{ marginBottom: 20 }}>Shopping Cart</div>
           <div
             style={{
@@ -397,13 +415,18 @@ const ItemComponent = ({
   const textOverflowStyle = readOnly ? {} : {};
 
   const price = convertPrice(item.metadata?.price).toFixed(2);
+  const isMobile = useIsMobile();
 
   return (
-    <Item style={{ marginBottom: readOnly && 0 }} key={"items" + index}>
+    <Item
+      isMobile={isMobile}
+      style={{ marginBottom: readOnly && 0 }}
+      key={"items" + index}
+    >
       <Img
         style={{
           width: "100%",
-          height: 300,
+          height: isMobile ? 200 : 300,
           backgroundSize: "cover",
           position: "relative",
         }}
@@ -441,7 +464,7 @@ const ItemComponent = ({
       >
         <TextWrap
           onClick={() => {
-            if (!readOnly) setFocusedItem(item);
+            // if (!readOnly) setFocusedItem(item);
           }}
         >
           <ItemLabel style={textOverflowStyle}>{item.name}</ItemLabel>
@@ -499,7 +522,7 @@ const Quantity = styled.div`
 `;
 
 const TextWrap = styled.div`
-  cursor: pointer;
+  // cursor: pointer;
 `;
 
 const ItemLabel = styled.div`
@@ -544,8 +567,12 @@ const Header = styled.div`
   z-index: 20;
 `;
 
-const Item = styled.div`
-  width: 320px;
+type ItemProps = {
+  isMobile?: boolean;
+};
+
+const Item = styled.div<ItemProps>`
+  width: ${(p) => (p.isMobile ? "200px" : "320px")};
   margin-bottom: 40px;
   background: #ffffff;
   border-radius: 6px;

@@ -1,5 +1,11 @@
 
-export const headers = [
+type Header = {
+  title: string,
+  to?: string,
+  link?:string
+}
+
+export const headers: Header[] = [
     
     {
       title: "About",

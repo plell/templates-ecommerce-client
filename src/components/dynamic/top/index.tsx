@@ -56,15 +56,6 @@ const Spacer = styled.div`
   height: 60px;
 `;
 
-const VideoWrap = styled.div`
-  height: 100%;
-  width: 100%;
-  background: yellow;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-
 const TopWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,7 +77,7 @@ const TopWrap = styled.div`
 
 const Title = styled.div`
   font-size: 70px;
-  // text-align: center;
+  text-align: center;
   // width: 380px;
   margin-bottom: 10px;
   z-index: 1;

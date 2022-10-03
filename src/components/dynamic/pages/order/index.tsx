@@ -15,9 +15,12 @@ import Order from "../../../core/order";
 import { Img, Row } from "../../../core/ui";
 import { getPriceFromForm } from "../../../core/helpers";
 import FadeInWrapper from "../../../core/ui/hoc/fadeInWrapper";
+import { useIsMobile } from "../../../../hooks";
 
 export default function OrderWrapper() {
   const [formState, setFormState]: any = useState({});
+
+  const isMobile = useIsMobile();
 
   function getFormState(values: any) {
     setFormState(values);
@@ -96,8 +99,8 @@ export default function OrderWrapper() {
               );
             })}
           </Cake>
-          <div style={{ width: 50 }} />
-          <div style={{ display: "flex", width: 420 }}>
+          {!isMobile && <div style={{ width: 50 }} />}
+          <div style={{ display: "flex", maxWidth: 420 }}>
             <Order
               getFormState={getFormState}
               initialValues={initialValues}

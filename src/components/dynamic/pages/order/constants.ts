@@ -14,7 +14,7 @@ import { DAYS_BEFORE_PICKUP } from '../../../../constants'
     },
   ];
 
-const defaultPickupDay = () => {
+export const defaultPickupDay = () => {
   let dd = moment().add(DAYS_BEFORE_PICKUP, 'days')
   const dayOfWeek = dd.day();
 
