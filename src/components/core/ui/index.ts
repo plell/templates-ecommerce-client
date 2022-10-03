@@ -101,6 +101,7 @@ width:100%;
 export const PageWrap = styled.div`
 display:flex;
 flex-direction:column;
+flex-wrap:wrap;
 align-items:center;
 flex:1;
 padding-top:30px;
@@ -124,6 +125,8 @@ height:60px;
 
 export const Row = styled.div`
 display:flex;
+flex-wrap:wrap;
+justify-content:center;
 `;
 
 type ImgProps = {

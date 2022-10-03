@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { team, text1, text2, text3, hours } from "./constants";
-import { Img, PageWrap } from "../../../core/ui";
+import { Img, PageWrap, Row, Col } from "../../../core/ui";
 
 export default function About({ innerRef }: any) {
   return (
-    <PageWrap ref={innerRef}>
+    <PageWrap ref={innerRef} style={{ textAlign: "center" }}>
       <Title>Our Mission</Title>
       <Row>
         <Col style={{ padding: 30, maxWidth: 500 }}>
@@ -89,17 +89,6 @@ export const Txt = styled.div`
   font-size: 17px;
   margin-bottom: 10px;
   line-height: 24px;
-`;
-
-export const Col = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
-export const Row = styled.div`
-  display: flex;
-  margin-bottom: 40px;
 `;
 
 const W = styled.div`

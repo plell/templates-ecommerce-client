@@ -11,7 +11,7 @@ import {
   FieldWrap,
 } from "../../ui";
 
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
@@ -170,13 +170,23 @@ export default function MyInput(props: any) {
       console.log("props.value", props.value);
       return getMuiWrap(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
+          <MobileDatePicker
+            inputFormat='MM/dd/yyyy'
             label='Pickup Date'
+            views={["month", "day"]}
             value={props.value}
             renderDay={renderWeekPickerDay}
             onChange={props.handleChange}
             renderInput={(params: any) => (
-              <TextField helperText='' {...params} />
+              <TextField
+                helperText=''
+                {...params}
+                onKeyDown={(e: any) => {
+                  //prevent manual input
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              />
             )}
           />
         </LocalizationProvider>

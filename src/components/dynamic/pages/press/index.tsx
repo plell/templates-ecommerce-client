@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 export default function Press({ innerRef }: any) {
   return (
-    <PageWrap ref={innerRef}>
+    <PageWrap ref={innerRef} style={{ textAlign: "center" }}>
       {press.map((m, i) => {
         return (
           <Row
