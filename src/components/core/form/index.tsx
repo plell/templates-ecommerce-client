@@ -224,7 +224,7 @@ const Wrap = styled.div`
   align-content: center;
   flex-shrink: 0;
   flex-grow: 0;
-  min-width: 380px;
+  min-width: 300px;
 `;
 
 const InputWrap = styled.div``;

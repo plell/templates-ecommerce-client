@@ -81,11 +81,12 @@ export default function OrderWrapper() {
         <Row
           style={{
             flex: 1,
+            flexDirection: isMobile ? "column" : "row",
             alignItems: "center",
             justifyContent: "space-evenly",
           }}
         >
-          <Cake>
+          <Cake isMobile={isMobile}>
             {imgs.map((c: any, i: number) => {
               return (
                 <Img
@@ -116,17 +117,31 @@ export default function OrderWrapper() {
   );
 }
 
-const Cake = styled.div`
+type CakeProps = {
+  isMobile: boolean;
+};
+
+const Cake = styled.div<CakeProps>`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-width: 450px;
-  width: 450px;
-  height: 450px;
+  ${(p) =>
+    p.isMobile
+      ? `
+      margin-top:20px;
+  min-width: 200px;
+  width: 200px;
+    height: 200px;
+    `
+      : `
+    margin-top: -60px;
+    min-width: 450px;
+    width: 450px;
+    height: 450px;`}
+
   background: #eee;
   border-radius: 20px;
-  margin-top: -60px;
 `;
 
 const Total = styled.div`
