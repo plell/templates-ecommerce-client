@@ -249,8 +249,8 @@ export default function Shopper({ innerRef }: any) {
       <Row
         style={{
           flexWrap: "wrap",
-          justifyContent: isMobile ? "space-evenly" : "flex-start",
-          padding: "40px 40px",
+          justifyContent: "center",
+          padding: "40px",
           width: "calc(100% - 80px)",
         }}
       >
@@ -258,6 +258,7 @@ export default function Shopper({ innerRef }: any) {
           items.map((item: any, index: number) => {
             return (
               <ItemComponent
+                key={"it" + index}
                 style={{ marginRight: isMobile ? 0 : 40 }}
                 removeFromCart={removeFromCart}
                 setFocusedItem={setFocusedItem}
