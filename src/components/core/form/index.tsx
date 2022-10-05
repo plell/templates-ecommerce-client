@@ -20,6 +20,7 @@ type FormProps = {
   disabled?: boolean;
   validateOnMount?: boolean;
   buttonStyle?: any;
+  inputStyle?: any;
 };
 
 export default function Form(props: FormProps) {
@@ -117,7 +118,7 @@ export default function Form(props: FormProps) {
                 }}
               >
                 <>
-                  <InputWrap>
+                  <InputWrap style={{ ...props.inputStyle }}>
                     {schema
                       ?.filter((f: any) => {
                         if (!props.paged) return true;

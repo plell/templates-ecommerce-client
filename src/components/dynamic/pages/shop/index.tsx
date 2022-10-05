@@ -353,7 +353,20 @@ export default function Shopper({ innerRef }: any) {
               </Button>
             </div>
           )}
-
+          <div>
+            <div>Please Read Before Ordering:</div>
+            <div
+              style={{
+                margin: "10px 0 40px",
+                fontWeight: 400,
+                color: "#4d8dff",
+              }}
+            >
+              Pastry pickup will be ready by 9am. Pastry orders must be placed
+              at least 48-hours in advance. Pickup instructions will also be
+              sent out in a confirmation email.
+            </div>
+          </div>
           <div style={{ marginBottom: 20 }}>Shopping Cart</div>
           <div
             style={{
@@ -366,7 +379,6 @@ export default function Shopper({ innerRef }: any) {
           >
             {cartList}
           </div>
-
           <Form
             initialValues={initialValues}
             getFormState={() => console.log("form state")}

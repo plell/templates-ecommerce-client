@@ -193,6 +193,13 @@ export const customCake = [
     type: "text",
     page: 7,
   },
+  {
+    name: "cake_color",
+    label: "Cake Color",
+    // price: 3,
+    type: "color",
+    page: 7,
+  },
 ];
 
 // change cake lables here!

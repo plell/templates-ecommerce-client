@@ -78,12 +78,43 @@ export default function OrderWrapper() {
       headerControls={headerControls}
     >
       <>
-        <Row
+        <div
           style={{
-            flex: 1,
+            padding: 20,
+            fontWeight: 300,
+            textAlign: "center",
+            maxWidth: 600,
+          }}
+        >
+          <div>Please Read Before Ordering:</div>
+          <div
+            style={{
+              margin: "10px 0 40px",
+              fontWeight: 400,
+              color: "#4d8dff",
+            }}
+          >
+            <div style={{ marginBottom: 10 }}>
+              <i>Cake pickup hours are 1-4pm on the date you selected.</i>
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              Cake orders must be placed at least 48-hours in advance. The pink
+              color on the example cake pictured is for illustration purposes,
+              your cake may not be pink. No-shows will be held for one day
+              unless we are contacted. Pickup instructions will also be sent out
+              in a confirmation email.
+            </div>
+            <div>
+              ALLERGEN WARNING: Cakes contain GLUTEN and SOY. We do not make
+              gluten free cakes.
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
             flexDirection: isMobile ? "column" : "row",
-            alignItems: "center",
-            justifyContent: "space-evenly",
+            alignItems: isMobile ? "center" : "flex-start",
           }}
         >
           <Cake isMobile={isMobile}>
@@ -106,12 +137,14 @@ export default function OrderWrapper() {
           {!isMobile && <div style={{ width: 50 }} />}
           <div style={{ display: "flex", maxWidth: 420 }}>
             <Order
+              inputStyle={{ width: 300 }}
               getFormState={getFormState}
               initialValues={initialValues}
               schema={schema}
             />
           </div>
-        </Row>
+        </div>
+        <div style={{ minHeight: 100 }} />
       </>
     </FadeInWrapper>
   );
@@ -124,18 +157,18 @@ type CakeProps = {
 const Cake = styled.div<CakeProps>`
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   ${(p) =>
     p.isMobile
       ? `
-      margin-top:20px;
+      
   min-width: 200px;
   width: 200px;
     height: 200px;
+    margin-bottom:20px;
     `
       : `
-    margin-top: -60px;
     min-width: 450px;
     width: 450px;
     height: 450px;`}

@@ -8,6 +8,7 @@ import { SessionResponse } from "../../types";
 type OrderProps = {
   initialValues: any;
   schema: any;
+  inputStyle?: any;
   getFormState: (values: any) => void;
 };
 
@@ -18,6 +19,7 @@ export default function Order({
   initialValues,
   schema,
   getFormState,
+  inputStyle,
 }: OrderProps) {
   const [loading, setLoading] = useState(false);
 
@@ -56,6 +58,7 @@ export default function Order({
   return (
     <Form
       paged
+      inputStyle={inputStyle}
       loading={loading}
       getFormState={getFormState}
       validateOnMount={true}

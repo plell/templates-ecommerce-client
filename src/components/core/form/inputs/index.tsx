@@ -16,6 +16,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import moment from "moment";
+import { SketchPicker, SwatchesPicker } from "react-color";
 
 import { DAYS_BEFORE_PICKUP } from "../../../../constants";
 
@@ -91,6 +92,28 @@ export default function MyInput(props: any) {
               props.handleChange(e.target.value);
             }}
           />
+        </>
+      );
+    case "color":
+      return (
+        <>
+          <InputLabel err={props.error}>{label}</InputLabel>
+          <div
+            style={{
+              // display: "flex",
+              // flexWrap: "wrap",
+              // justifyContent: "center",
+              // alignItems: "center",
+              margin: "15px 0 30px",
+            }}
+          >
+            <SwatchesPicker
+              color={props.value}
+              onChangeComplete={(e) => {
+                props.handleChange(e.hex);
+              }}
+            />
+          </div>
         </>
       );
     case "number":
