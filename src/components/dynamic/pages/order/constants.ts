@@ -80,7 +80,33 @@ export const cakeImages: any = {
     'cake_decorations_trim_accent_Bows': 'decorations/side trim accents/ribbon trim/bows accent ribbon trim.PNG',
     'cake_decorations_trim_accent_Pearls': 'decorations/side trim accents/ribbon trim/pearls accent ribbon trim.PNG',
     'cake_decorations_trim_accent_Rosettes': 'decorations/side trim accents/ribbon trim/rosettes leaves accent ribbon trim color.PNG',
-    'cake_text':'text/text round.PNG'
+  'cake_text': 'text/text round.PNG',
+
+  // custom for trim
+  'Rosettes_Double String': 'decorations/side trim accents/string - double string trim/rosettes accent string trim color.PNG',
+  'Rosettes_Single String': 'decorations/side trim accents/string - double string trim/rosettes accent string trim color.PNG',
+  'Rosettes_Flat Ribbon': 'decorations/side trim accents/flat ribbon trim/rosettes accent flat ribbon trim color.PNG',
+  'Rosettes_Ribbon': 'decorations/side trim accents/ribbon trim/rosettes accent ribbon trim color.PNG',
+  'Rosettes_Ruffles': 'decorations/side trim accents/ruffles trim/rosettes accent ruffles trim color.PNG',
+
+  'Shells_Double String': 'decorations/side trim accents/string - double string trim/shell accent string trim color.PNG',
+  'Shells_Single String': 'decorations/side trim accents/string - double string trim/shell accent string trim color.PNG',
+  'Shells_Flat Ribbon': 'decorations/side trim accents/flat ribbon trim/shell accent flat ribbon trim color.PNG',
+  'Shells_Ribbon': 'decorations/side trim accents/ribbon trim/shell accent ribbon trim color.PNG',
+  'Shells_Ruffles': 'decorations/side trim accents/ruffles trim/shell accent ruffles trim color.PNG',
+
+  'Pearls_Double String': 'decorations/side trim accents/string - double string trim/pearls accent string trim.PNG',
+  'Pearls_Single String': 'decorations/side trim accents/string - double string trim/pearls accent string trim.PNG',
+  'Pearls_Flat Ribbon': 'decorations/side trim accents/flat ribbon trim/pearls accent flat ribbon trim.PNG',
+  'Pearls_Ribbon': 'decorations/side trim accents/ribbon trim/pearls accent ribbon trim.PNG',
+  'Pearls_Ruffles': 'decorations/side trim accents/ruffles trim/pearls accent ruffles trim.PNG',
+
+  'Bows_Double String': 'decorations/side trim accents/string - double string trim/bows accent string trim.PNG',
+  'Bows_Single String': 'decorations/side trim accents/string - double string trim/bows accent string trim.PNG',
+  'Bows_Flat Ribbon': 'decorations/side trim accents/flat ribbon trim/bows accent flat ribbon trim.PNG',
+  'Bows_Ribbon': 'decorations/side trim accents/ribbon trim/bows accent ribbon trim.PNG',
+  'Bows_Ruffles': 'decorations/side trim accents/ruffles trim/bows accent ruffles trim.PNG',
+
 }
   
 const heartOptions: any = {
@@ -120,6 +146,12 @@ export const doCakeImages = (schemaOriginal: any, formStateOriginal: any): strin
          imgKey = 'cake_text'
        }
 
+       // do side trim accent
+
+       if (keyname === 'cake_decorations_trim_accent') {
+        imgKey = getSideTrimAccentImageKey(imgKey, value, formState)
+       }
+
       
        let imgUrl: string = cakeImages[`${imgKey}`]
        
@@ -143,3 +175,15 @@ export const doCakeImages = (schemaOriginal: any, formStateOriginal: any): strin
   
    return imgs
   }
+
+
+function getSideTrimAccentImageKey(imgKey:string, value: string, formValues: any) {  
+  const sideTrimValue = formValues["cake_side"]
+  if (sideTrimValue) {
+    return value+ `_${sideTrimValue}`
+  } else {
+    return imgKey
+  }
+  }
+
+  

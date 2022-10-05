@@ -23,10 +23,10 @@ export const headers: Header[] = [
       title: "Press",
       to: "/press",
     },
-    // {
-    //   title: "Newsletter",
-    //   to: "/newsletter",
-    // },
+    {
+      title: "Newsletter",
+      to: "/newsletter",
+    },
     // {
     //   title: "Contact",
     //   to: "/contact",

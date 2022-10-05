@@ -32,7 +32,7 @@ export default function Dynamic() {
     <Wrap>
       <About innerRef={page1} />
       <Press innerRef={page2} />
-      {/* <Newsletter innerRef={page3} /> */}
+      <Newsletter innerRef={page3} />
 
       <Order />
       <Shop />

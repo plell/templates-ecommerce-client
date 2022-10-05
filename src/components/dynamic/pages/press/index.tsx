@@ -5,7 +5,10 @@ import styled from "styled-components";
 
 export default function Press({ innerRef }: any) {
   return (
-    <PageWrap ref={innerRef} style={{ textAlign: "center" }}>
+    <PageWrap
+      ref={innerRef}
+      style={{ textAlign: "center", alignItems: "center", width: "auto" }}
+    >
       {press.map((m, i) => {
         return (
           <Row
@@ -15,25 +18,26 @@ export default function Press({ innerRef }: any) {
               padding: "20px 40px",
               borderRadius: 30,
               marginBottom: 50,
+              width: "auto",
             }}
           >
-            <Col style={{ padding: 30, width: 400 }}>
+            <Col style={{ padding: 30, maxWidth: 400, width: "100%" }}>
               <div
                 onClick={() => redirect(m.link)}
                 style={{ fontSize: 41, color: "#fff" }}
               >
                 {m.title}
               </div>
-              <Wrap style={{ justifyContent: "center" }}>
+              <div>
                 <Txt>{m.text}</Txt>
                 <Txt>{m.sub}</Txt>
-              </Wrap>
+              </div>
             </Col>
 
             <Col>
               <Img
                 src={"images/" + m.img}
-                style={{ height: 466, width: 391 }}
+                style={{ height: 466, width: 391, minWidth: 200 }}
               />
             </Col>
           </Row>
