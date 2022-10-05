@@ -46,6 +46,7 @@ export const defaultPickupDay = () => {
     cake_size: "6-inch",
     cake_type: "Choose a Preset Cake",
     cake_design: cakeInformation["Baby Blue w/ Cherries"].label,
+    cake_color:"#f8bbd0",
     pickup_date: defaultPickupDay()
   };
 
