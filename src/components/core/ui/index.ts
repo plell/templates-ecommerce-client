@@ -16,7 +16,7 @@ align-items:center;
 export const ModalBody: any = styled.div`
 display:flex;
 flex-direction:column;
-// justify-content:center;
+justify-content:center;
 align-items:center;
 padding:40px;
 border-radius:10px;
@@ -102,8 +102,8 @@ export const PageWrap = styled.div`
 display:flex;
 flex-direction:column;
 flex-wrap:wrap;
-align-items:center;
 flex:1;
+width:100%;
 padding-top:30px;
 margin-bottom:30px;
 `;
@@ -146,5 +146,5 @@ export const Img = styled.div<ImgProps>`
 
 export const Title = styled.div`
   font-size: 36px;
-  margin: 55px 0;
+  margin: 55px 0 30px;
 `;

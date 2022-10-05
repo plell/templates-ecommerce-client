@@ -3,15 +3,7 @@ import styled from "styled-components";
 import Form from "../../../core/form";
 import { mailingListSchema } from "../../../core/form/schema";
 import { submitToMailingList } from "../../../../network/actions";
-import {
-  Wrap,
-  Row,
-  TextField,
-  Modal,
-  ModalBody,
-  Button,
-  Title,
-} from "../../../core/ui";
+import { Wrap, Modal, ModalBody, Title, Col } from "../../../core/ui";
 
 export default function Newsletter({ innerRef }: any) {
   const [loading, setLoading] = useState(false);
@@ -23,7 +15,9 @@ export default function Newsletter({ innerRef }: any) {
       console.log("formState.email", formState.email);
       await submitToMailingList(formState);
       setSuccess(true);
-    } catch {}
+    } catch (e) {
+      console.log("failed", e);
+    }
     setLoading(false);
   }
 
@@ -47,7 +41,14 @@ export default function Newsletter({ innerRef }: any) {
 
       <Modal open={success} onClose={() => setSuccess(false)}>
         <ModalBody style={{ minHeight: 0 }}>
-          Thanks for your interest! You've been added to our mailing list.
+          <Col style={{ alignItems: "center" }}>
+            <div style={{ marginBottom: 20, fontWeight: 500 }}>
+              Thanks for your interest!
+            </div>
+            <div style={{ fontWeight: 300 }}>
+              You've been added to our mailing list.
+            </div>
+          </Col>
         </ModalBody>
       </Modal>
     </Wrap>
@@ -55,6 +56,6 @@ export default function Newsletter({ innerRef }: any) {
 }
 
 const Txt = styled.div`
-  margin-bottom: 30px;
   font-weight: 300;
+  padding: 30px;
 `;

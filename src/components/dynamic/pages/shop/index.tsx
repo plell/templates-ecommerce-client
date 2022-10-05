@@ -249,15 +249,16 @@ export default function Shopper({ innerRef }: any) {
       <Row
         style={{
           flexWrap: "wrap",
-          justifyContent: "space-evenly",
-          padding: "40px 0",
-          width: "100%",
+          justifyContent: isMobile ? "space-evenly" : "flex-start",
+          padding: "40px 40px",
+          width: "calc(100% - 80px)",
         }}
       >
         {items?.length ? (
           items.map((item: any, index: number) => {
             return (
               <ItemComponent
+                style={{ marginRight: isMobile ? 0 : 40 }}
                 removeFromCart={removeFromCart}
                 setFocusedItem={setFocusedItem}
                 editCart={editCart}
@@ -339,7 +340,7 @@ export default function Shopper({ innerRef }: any) {
               style={{
                 marginBottom: 20,
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "flex-start",
               }}
             >
               <Button
@@ -408,6 +409,7 @@ const ItemComponent = ({
   removeFromCart,
   setFocusedItem,
   editCart,
+  style,
 }: any) => {
   const id = item.id;
   let amount = cart[id] !== 0 && cart[id];
@@ -420,13 +422,13 @@ const ItemComponent = ({
   return (
     <Item
       isMobile={isMobile}
-      style={{ marginBottom: readOnly && 0 }}
+      style={{ marginBottom: readOnly && 0, ...style }}
       key={"items" + index}
     >
       <Img
         style={{
           width: "100%",
-          height: isMobile ? 200 : 300,
+          height: 240,
           backgroundSize: "cover",
           position: "relative",
         }}
@@ -527,24 +529,24 @@ const TextWrap = styled.div`
 
 const ItemLabel = styled.div`
   margin-bottom: 10px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   cursor: pointer;
 `;
 
 const ItemDescription = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   margin-bottom: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   cursor: pointer;
 `;
@@ -572,7 +574,7 @@ type ItemProps = {
 };
 
 const Item = styled.div<ItemProps>`
-  width: ${(p) => (p.isMobile ? "200px" : "320px")};
+  width: 280px;
   margin-bottom: 40px;
   background: #ffffff;
   border-radius: 6px;

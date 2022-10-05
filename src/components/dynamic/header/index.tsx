@@ -22,7 +22,7 @@ export default function Header({ scrollTop }: any) {
 
   const headerHeight = 60;
   const logo = (
-    <Img style={{ height: 60, width: 60 }} src={"images/cowbaby.webp"} />
+    <Img style={{ height: 60, width: 60 }} src={"images/cowbaby.png"} />
   );
 
   let header = (
