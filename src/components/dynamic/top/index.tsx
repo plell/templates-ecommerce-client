@@ -2,11 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useIsMobile } from "../../../hooks";
-import { Button, Wrap } from "../../core/ui";
+import { Button, Img, Wrap } from "../../core/ui";
 
 export default function Top() {
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const videoRef: any = useRef();
   const navigate = useNavigate();
 
   const isMobile = useIsMobile();
@@ -14,21 +12,14 @@ export default function Top() {
   return (
     <TopWrap>
       {!isMobile && <div style={{ height: 70 }} />}
-      <video
-        ref={videoRef}
-        onLoadedData={() => setVideoLoaded(true)}
-        loop
-        autoPlay
-        muted
+      <Img
+        src={"images/cake_movie.gif"}
         style={{
           transition: "opacity 1s",
           height: 600,
           minHeight: 500,
-          opacity: videoLoaded ? 1 : 0,
         }}
-      >
-        <source src='images/cake_movie.mp4' type='video/mp4'></source>
-      </video>
+      />
 
       <Wrap style={{ position: "absolute" }}>
         <Title>Lazy Cow Bakery</Title>
