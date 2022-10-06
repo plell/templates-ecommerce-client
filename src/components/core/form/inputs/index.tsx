@@ -190,7 +190,6 @@ export default function MyInput(props: any) {
         </>
       );
     case "date":
-      console.log("props.value", props.value);
       return getMuiWrap(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <MobileDatePicker
@@ -199,7 +198,10 @@ export default function MyInput(props: any) {
             views={["month", "day"]}
             value={props.value}
             renderDay={renderWeekPickerDay}
-            onChange={props.handleChange}
+            onChange={(e) => {
+              let value = moment(e).toISOString();
+              props.handleChange(value);
+            }}
             renderInput={(params: any) => (
               <TextField
                 helperText=''
