@@ -1,5 +1,6 @@
 
-import moment from "moment";
+import moment from "moment-timezone";
+
 import { DAYS_BEFORE_PICKUP } from '../../../../constants'
 
   export const presetCakes = [
@@ -16,6 +17,7 @@ import { DAYS_BEFORE_PICKUP } from '../../../../constants'
 
 export const defaultPickupDay = () => {
   let dd = moment().add(DAYS_BEFORE_PICKUP, 'days')
+
   const dayOfWeek = dd.day();
 
   if (dayOfWeek === 1) {
@@ -24,7 +26,7 @@ export const defaultPickupDay = () => {
     dd.add(1, 'days')
   }
    
-  return dd.format()  
+  return dd.toISOString()
 }
 
   export const cakeInformation:any = {
