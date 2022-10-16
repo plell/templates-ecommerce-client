@@ -5,6 +5,8 @@ import { headers } from "./constants";
 import { Button, FadeIn, Img, Row, Select, MenuItem } from "../../core/ui";
 import { useIsMobile } from "../../../hooks";
 import { Menu } from "@mui/icons-material";
+import { MAIN_LOGO } from "../../../constants";
+import { usePrevious } from "../../../hooks";
 
 export default function Header({ scrollTop }: any) {
   const navigate = useNavigate();
@@ -20,9 +22,11 @@ export default function Header({ scrollTop }: any) {
     setPath(location.pathname);
   }, [location]);
 
+  const prevScrollTop = usePrevious(scrollTop);
+
   const headerHeight = 60;
   const logo = (
-    <Img style={{ height: 60, width: 60 }} src={"images/cowbaby.png"} />
+    <Img style={{ height: 60, width: 60 }} src={`images/${MAIN_LOGO}`} />
   );
 
   let header = (
@@ -116,7 +120,13 @@ export default function Header({ scrollTop }: any) {
 
   const floatingHeader = (
     <FadeIn
-      isMounted={scrollTop > headerHeight}
+      isMounted={
+        prevScrollTop &&
+        prevScrollTop > headerHeight &&
+        scrollTop < prevScrollTop
+          ? true
+          : false
+      }
       style={{
         position: "fixed",
         top: 0,

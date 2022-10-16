@@ -12,7 +12,7 @@ import {
   cakeInformation,
 } from "./constants";
 import Order from "../../../core/order";
-import { Img, Row } from "../../../core/ui";
+import { Img } from "../../../core/ui";
 import { getPriceFromForm } from "../../../core/helpers";
 import FadeInWrapper from "../../../core/ui/hoc/fadeInWrapper";
 import { useIsMobile } from "../../../../hooks";
