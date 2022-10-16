@@ -5,13 +5,13 @@ import Header from "./header";
 import { Wrap } from "../core/ui";
 import { useLocation } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
+import { usePrevious } from "../../hooks";
 
 export default function Content() {
   const scrollRef: any = useRef();
   const bottomRef: any = useRef();
   const location = useLocation();
   const path = location.pathname;
-
   const [scrollTop, setScrollTop] = useState(0);
 
   function doScroll(e: any) {

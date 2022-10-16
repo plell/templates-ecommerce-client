@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useIsMobile } from "../../../hooks";
 import { Button, Img, Wrap } from "../../core/ui";
 
 export default function Top() {

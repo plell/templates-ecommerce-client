@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function getIsMobile() {
   // definition of mobile width, this is the trigger to switch
@@ -41,4 +41,13 @@ function useScreenWidth() {
   return width;
 }
 
-export { useIsMobile, useScreenWidth, getScreenWidth, getIsMobile, screenWidthOffset }
+function usePrevious(stateValue:any) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = stateValue; //assign the value of ref to the argument
+  },[stateValue]); //this code will run when the value of 'value' changes
+  return ref.current; //in the end, return the current ref value.
+}
+
+
+export { useIsMobile, useScreenWidth, getScreenWidth, getIsMobile, screenWidthOffset, usePrevious }
